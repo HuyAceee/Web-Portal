@@ -1,0 +1,10 @@
+{
+  "validation": {
+    "message": {
+      "required": "This field is required",
+      "email": "This field must be an email",
+      "phoneNumber": "This field must be a phone number",
+      "confirmPasswordNotMatch": "Confirm password does not match"
+    }
+  }
+}

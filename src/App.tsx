@@ -1,26 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import ThemeProvider from "./theme";
+import { useScrollToTop } from "./hooks/useScrollToTop";
+import Router from "./routes/router";
+import { DialogProvider } from "contexts/DialogContext";
+import { LoadingProvider } from "contexts/LoadingContext";
+import { SnackbarProvider } from "notistack";
+import { AuthProvider } from "contexts/AuthContext";
 
-function App() {
+// ----------------------------------------------------------------------
+
+export default function App() {
+  useScrollToTop();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider>
+      <AuthProvider>
+        <LoadingProvider>
+          <DialogProvider>
+            <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
+              <Router />
+            </SnackbarProvider>
+          </DialogProvider>
+        </LoadingProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
-
-export default App;

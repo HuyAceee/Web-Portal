@@ -1,0 +1,17 @@
+{
+  "notification": {
+    "button": {
+      "cancel": "Cancel",
+      "agree": "Agree"
+    },
+    "title": {
+      "default": "Notification",
+      "confirmChangePassword": "Confirm password change"
+    },
+    "content": {
+      "confirmChangePassword": "Do you want to change your password?",
+      "changePasswordSuccess": "You have successfully changed your password",
+      "changePasswordFail": "You have failed to change your password"
+    }
+  }
+}

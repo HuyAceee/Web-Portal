@@ -1,0 +1,37 @@
+{
+  "profile": {
+    "content": {
+      "subheader": "The information can be edited",
+      "title": "Profile"
+    },
+    "form": {
+      "accountName": "Account name",
+      "emailAddress": "Email address",
+      "class": "Class",
+      "gender": "Gender",
+      "birthday": "Birthday",
+      "phoneNumber": "Phone number",
+      "oldPassword": "Old password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm password"
+    },
+    "action": {
+      "save": "Save",
+      "changePassword": "Change password"
+    },
+    "options": {
+      "gender": {
+        "male": "Male",
+        "female": "Female"
+      }
+    },
+    "info": {
+      "title": "Account",
+      "upload": "Upload picture"
+    },
+    "changePassword": {
+      "subheader": "Password can be edited",
+      "title": "Change password"
+    }
+  }
+}

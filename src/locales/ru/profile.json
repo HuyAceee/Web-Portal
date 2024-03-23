@@ -1,0 +1,26 @@
+{
+  "profile": {
+    "content": {
+      "subheader": "Информация может быть отредактирована",
+      "title": "Профиль"
+    },
+    "form": {
+      "accountName": "Имя учетной записи",
+      "emailAddress": "Адрес электронной почты",
+      "class": "Сорт",
+      "gender": "Пол",
+      "birthday": "День рождения",
+      "phoneNumber": "Номер телефона"
+    },
+    "options": {
+      "gender": {
+        "male": "Мужской",
+        "female": "Женский"
+      }
+    },
+    "info": {
+        "title": "Account",
+        "upload": "Upload picture"
+    }
+  }
+}

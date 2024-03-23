@@ -1,0 +1,9 @@
+{
+  "contactAdmin": {
+    "form": {
+      "question": "Question"
+    },
+    "title": "Contact admin",
+    "subheader": "Ask questions to Admin"
+  }
+}
