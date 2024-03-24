@@ -6,12 +6,13 @@ import Header from "./Header";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_PAGE } from "constant/router";
 import { handleLocalStorage } from "utils/localStorage";
+import { ACCESS_TOKEN } from "constant/key";
 
 // ----------------------------------------------------------------------
 
 export default function DashboardLayout({ children }: any) {
   const { getLocalStorage } = handleLocalStorage();
-  const accessToken = getLocalStorage("accessToken");
+  const accessToken = getLocalStorage(ACCESS_TOKEN);
   const [openNav, setOpenNav] = useState(false);
   const navigate = useNavigate();
 

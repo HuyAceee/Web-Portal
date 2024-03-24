@@ -6,7 +6,10 @@
     },
     "title": {
       "default": "Notification",
-      "confirmChangePassword": "Confirm password change"
+      "confirmChangePassword": "Confirm password change",
+      "loginSuccess": "Login success!",
+      "loginFail": "Login fail!",
+      "loginAgain": "Please login again!"
     },
     "content": {
       "confirmChangePassword": "Do you want to change your password?",

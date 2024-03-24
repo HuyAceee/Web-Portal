@@ -15,8 +15,9 @@ export const ResetPasswordPage = lazy(() => import("pages/ResetPassword"));
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { role } = useContext(AuthContext)
-  const router = role === RoleEnum.USER ? routerUser : routerAdmin
+  const { userInfo } = useContext(AuthContext)
+  console.log(userInfo)
+  const router = userInfo.role !== RoleEnum.USER ? routerUser : routerAdmin
   const routes = useRoutes([
     {
       element: (

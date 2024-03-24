@@ -29,6 +29,8 @@ import { AccountCircle } from "@mui/icons-material";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { handleLocalStorage } from "utils/localStorage";
 import { RoleEnum } from "models/common";
+import { AuthService } from "services/auth";
+import { ACCESS_TOKEN } from "constant/key";
 
 const userAccount = {
   email: "user@ok.net",
@@ -73,30 +75,16 @@ export default function LoginView() {
       resetForm();
       try {
         openLoading();
-        if (value.email === userAccount.email) {
-          setLocalStorage("accessToken", "huydv");
-          setLocalStorage("ROLE", RoleEnum.USER);
-          enqueueSnackbar(t("notification.content.changePasswordSuccess"), {
-            variant: "success",
-          });
-          router.push(DASHBOARD_PAGE);
-        } else if (value.email === adminAccount.email) {
-          setLocalStorage("accessToken", "huydv");
-          setLocalStorage("ROLE", RoleEnum.ADMIN);
-          enqueueSnackbar(t("notification.content.changePasswordSuccess"), {
-            variant: "success",
-          });
-          router.push(DASHBOARD_PAGE);
-        } else {
-          enqueueSnackbar(t("notification.content.changePasswordFail"), {
-            variant: "error",
-          });
-        }
+        const { data: accessToken } = await AuthService.login(value);
 
-        // await call api
-      } catch (error) {
-        enqueueSnackbar(t("notification.content.changePasswordFail"), {
+        setLocalStorage(ACCESS_TOKEN, accessToken);
+        enqueueSnackbar(t("notification.title.loginSuccess"), {
           variant: "success",
+        });
+        router.push(DASHBOARD_PAGE);
+      } catch (error) {
+        enqueueSnackbar(t("notification.title.loginFail"), {
+          variant: "error",
         });
       } finally {
         closeLoading();
@@ -107,7 +95,7 @@ export default function LoginView() {
   const { errors, handleChange, values, handleSubmit, touched } = formik;
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if (accessToken) router.push(DASHBOARD_PAGE);
   }, []);
 

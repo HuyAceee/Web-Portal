@@ -12,6 +12,7 @@ import { account } from '_mock/account';
 import { DASHBOARD_PAGE, LOGIN_PAGE, PROFILE_PAGE } from 'constant/router';
 import { useRouter } from 'routes/hooks';
 import { handleLocalStorage } from 'utils/localStorage';
+import { ACCESS_TOKEN } from 'constant/key';
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ export default function AccountPopover() {
   };
 
   const handleLogout = () => {
-    removeLocalStorage("accessToken")
+    removeLocalStorage(ACCESS_TOKEN)
     router.push(LOGIN_PAGE)
   }
 
