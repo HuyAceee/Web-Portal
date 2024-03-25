@@ -10,42 +10,49 @@ import { fDate } from "utils/formatTime";
 import { fShortenNumber } from "utils/formatNumber";
 import SvgColor from "components/SvgColor";
 import Iconify from "components/Iconify";
-import { Grow, Paper } from "@mui/material";
+import { Grow, Paper, Tooltip } from "@mui/material";
+import type { NotificationModel } from "models/view/notification";
+import { useContext } from "react";
+import { AuthContext } from "contexts/AuthContext";
+import { convertImageUrl } from "utils/common";
 
 // ----------------------------------------------------------------------
 
 interface PostCardProps {
-  post: any;
+  post: NotificationModel;
   index: number;
 }
 
 export default function PostCard({ post, index }: PostCardProps) {
-  const { cover, title, view, comment, share, author, createdAt } = post;
+  const { userInfo } = useContext(AuthContext);
+  const { description, endDate, imageUrl, startDate, title } = post;
 
   const latestPostLarge = index === 0;
 
   const latestPost = index === 1 || index === 2;
 
   const renderAvatar = (
-    <Avatar
-      alt={author.name}
-      src={author.avatarUrl}
-      sx={{
-        zIndex: 9,
-        width: 32,
-        height: 32,
-        position: "absolute",
-        left: (theme) => theme.spacing(3),
-        bottom: (theme) => theme.spacing(-2),
-        ...((latestPostLarge || latestPost) && {
+    <Tooltip title={userInfo.name} aria-label="add">
+      <Avatar
+        alt={userInfo.name}
+        src={convertImageUrl(userInfo.imageUrl)}
+        sx={{
           zIndex: 9,
-          top: 24,
-          left: 24,
-          width: 40,
-          height: 40,
-        }),
-      }}
-    />
+          width: 32,
+          height: 32,
+          position: "absolute",
+          left: (theme) => theme.spacing(3),
+          bottom: (theme) => theme.spacing(-2),
+          ...((latestPostLarge || latestPost) && {
+            zIndex: 9,
+            top: 24,
+            left: 24,
+            width: 40,
+            height: 40,
+          }),
+        }}
+      />
+    </Tooltip>
   );
 
   const renderTitle = (
@@ -54,12 +61,12 @@ export default function PostCard({ post, index }: PostCardProps) {
       variant="subtitle2"
       underline="hover"
       sx={{
-        height: 44,
+        height: 40,
         overflow: "hidden",
         WebkitLineClamp: 2,
         display: "-webkit-box",
         WebkitBoxOrient: "vertical",
-        ...(latestPostLarge && { typography: "h5", height: 60 }),
+        ...(latestPostLarge && { typography: "h5", height: 40 }),
         ...((latestPostLarge || latestPost) && {
           color: "common.white",
         }),
@@ -74,33 +81,11 @@ export default function PostCard({ post, index }: PostCardProps) {
       direction="row"
       flexWrap="wrap"
       spacing={1.5}
-      justifyContent="flex-end"
       sx={{
-        mt: 3,
         color: "text.disabled",
       }}
     >
-      {[
-        { number: comment, icon: "eva:message-circle-fill" },
-        { number: view, icon: "eva:eye-fill" },
-        { number: share, icon: "eva:share-fill" },
-      ].map((info, _index) => (
-        <Stack
-          key={_index}
-          direction="row"
-          sx={{
-            ...((latestPostLarge || latestPost) && {
-              opacity: 0.48,
-              color: "common.white",
-            }),
-          }}
-        >
-          <Iconify width={16} icon={info.icon} sx={{ mr: 0.5 }} />
-          <Typography variant="caption">
-            {fShortenNumber(info.number)}
-          </Typography>
-        </Stack>
-      ))}
+      <Typography variant="caption">{description}</Typography>
     </Stack>
   );
 
@@ -108,7 +93,7 @@ export default function PostCard({ post, index }: PostCardProps) {
     <Box
       component="img"
       alt={title}
-      src={cover}
+      src={convertImageUrl(imageUrl)}
       sx={{
         top: 0,
         width: 1,
@@ -132,7 +117,7 @@ export default function PostCard({ post, index }: PostCardProps) {
         }),
       }}
     >
-      {fDate(createdAt)}
+      {fDate(startDate) + " - " + fDate(endDate)}
     </Typography>
   );
 

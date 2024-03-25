@@ -1,16 +1,20 @@
-import Avatar from "@mui/material/Avatar";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { Container, styled } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
-import { useTranslation } from "react-i18next";
-import { styled } from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { AuthContext } from "contexts/AuthContext";
+import {
+    Dispatch,
+    SetStateAction,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
+import { useTranslation } from "react-i18next";
 import { convertImageUrl } from "utils/common";
 
 const VisuallyHiddenInput = styled("input")({
@@ -25,13 +29,15 @@ const VisuallyHiddenInput = styled("input")({
   width: 1,
 });
 
-interface AccountInfoProps {
-  selectedFile: any
-  setSelectedFile: Dispatch<SetStateAction<undefined>>
+interface NotificationInfoProps {
+  selectedFile: any;
+  setSelectedFile: Dispatch<SetStateAction<undefined>>;
 }
 
-export function AccountInfo({ selectedFile, setSelectedFile }: AccountInfoProps): React.JSX.Element {
-  const { userInfo: user } = useContext(AuthContext)
+export function NotificationInfo({
+  selectedFile,
+  setSelectedFile,
+}: NotificationInfoProps): React.JSX.Element {
   const { t } = useTranslation();
 
   const handleUploadFile = () => {
@@ -65,19 +71,20 @@ export function AccountInfo({ selectedFile, setSelectedFile }: AccountInfoProps)
   return (
     <Card>
       <CardContent>
-        <Stack spacing={2} sx={{ alignItems: "center" }}>
-          <div>
-            <Avatar src={preview ?? convertImageUrl(user.imageUrl)} sx={{ height: "100px", width: "100px" }} />
-          </div>
-          <Stack spacing={1} sx={{ textAlign: "center" }}>
-            <Typography variant="h5">{user.name}</Typography>
-            <Typography color="text.secondary" variant="body2">
-              {user.email}
-            </Typography>
-            <Typography color="text.secondary" variant="body2">
-              {user.phoneNumber}
-            </Typography>
-          </Stack>
+        <Stack sx={{ alignItems: "center" }}>
+          <Container
+            component={"img"}
+            src={preview}
+            sx={{
+              height: "auto",
+              width: "100%",
+              minHeight: '200px',
+              borderRadius: "6px",
+              border: 'none',
+              paddingLeft: "0 !important",
+              paddingRight: "0 !important",
+            }}
+          />
         </Stack>
       </CardContent>
       <Divider />

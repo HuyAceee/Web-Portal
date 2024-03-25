@@ -1,18 +1,18 @@
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { LoginView } from "sections/login";
+import NotificationView from "sections/notification/view/NotificationView";
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function NotificationPage() {
   const { t } = useTranslation();
   return (
     <>
       <Helmet>
-        <title> {t("title.login")} </title>
+        <title> {t("title.notification")}</title>
       </Helmet>
 
-      <LoginView />
+      <NotificationView />
     </>
   );
 }

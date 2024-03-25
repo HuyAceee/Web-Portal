@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: any) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!accessToken) navigate(LOGIN_PAGE);
+    // if (!accessToken) navigate(LOGIN_PAGE);
   }, []);
 
   return (

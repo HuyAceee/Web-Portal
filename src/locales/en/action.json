@@ -1,6 +1,8 @@
 {
-    "action": {
-        "save": "Save",
-        "send": "Send"
-    }
+  "action": {
+    "save": "Save",
+    "send": "Send",
+    "create": "Create",
+    "logout": "Logout"
+  }
 }

@@ -1,16 +1,15 @@
-import { Fragment, useEffect } from "react";
+import { Fragment, useContext, useEffect } from "react";
 
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
-import { alpha } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
 import ListItemButton from "@mui/material/ListItemButton";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { alpha } from "@mui/material/styles";
 
-import { usePathname } from "routes/hooks";
 import { RouterLink } from "routes/components";
+import { usePathname } from "routes/hooks";
 
 import { useResponsive } from "hooks/useResponsive";
 
@@ -19,20 +18,19 @@ import { account } from "_mock/account";
 import Logo from "components/Logo";
 import Scrollbar from "components/Scrollbar";
 
-import { NAV } from "./ConfigLayout";
-import { handleLocalStorage } from "utils/localStorage";
-import { RoleEnum } from "models/common";
 import { routerAdmin, routerUser } from "constant/routerConfig";
+import { AuthContext } from "contexts/AuthContext";
+import { NAV } from "./ConfigLayout";
+import { isAdmin } from "utils/common";
 
 // ----------------------------------------------------------------------
 
 export default function Nav({ openNav, onCloseNav }: any) {
   const pathname = usePathname();
-  const { getLocalStorage } = handleLocalStorage()
-  const role = getLocalStorage('ROLE') as RoleEnum
+  const { userInfo } = useContext(AuthContext);
   const upLg = useResponsive("up", "lg");
 
-  const navConfig = role === RoleEnum.USER ? routerUser : routerAdmin
+  const navConfig = isAdmin(userInfo.role) ? routerAdmin : routerUser;
 
   useEffect(() => {
     if (openNav) {
@@ -68,9 +66,9 @@ export default function Nav({ openNav, onCloseNav }: any) {
 
   const renderMenu = (
     <Stack component="nav" spacing={0.5} sx={{ px: 2 }}>
-      {navConfig?.filter((nav) => !nav.isHiddenMenu).map((item) => (
-        <NavItem key={item.title} item={item} />
-      ))}
+      {navConfig
+        ?.filter((nav) => !nav.isHiddenMenu)
+        .map((item) => <NavItem key={item.title} item={item} />)}
     </Stack>
   );
 

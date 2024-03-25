@@ -1,53 +1,38 @@
-import { useContext, useEffect, useState } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
-import Link from "@mui/material/Link";
 import Card from "@mui/material/Card";
-import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Link from "@mui/material/Link";
+import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import LoadingButton from "@mui/lab/LoadingButton";
 import { alpha, useTheme } from "@mui/material/styles";
-import InputAdornment from "@mui/material/InputAdornment";
+import { useContext, useEffect, useState } from "react";
 
 import { useRouter } from "routes/hooks";
 
 import { bgGradient } from "theme/css";
 
-import Iconify from "components/Iconify";
-import LanguagePopover from "layouts/dashboard/common/LanguagePopover";
-import { DASHBOARD_PAGE, LOGIN_PAGE, RESET_PASSWORD } from "constant/router";
-import { useTranslation } from "react-i18next";
-import { useSnackbar } from "notistack";
-import { LoadingContext } from "contexts/LoadingContext";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { fieldEmail, fieldRequired } from "constant/validation";
-import { FormHelperText } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { handleLocalStorage } from "utils/localStorage";
-import { RoleEnum } from "models/common";
-import { AuthService } from "services/auth";
+import { FormHelperText } from "@mui/material";
+import Iconify from "components/Iconify";
 import { ACCESS_TOKEN } from "constant/key";
-
-const userAccount = {
-  email: "user@ok.net",
-  password: "1234asdf",
-};
-
-const adminAccount = {
-  email: "admin@ok.net",
-  password: "1234asdf",
-};
+import { DASHBOARD_PAGE, RESET_PASSWORD } from "constant/router";
+import { fieldEmail, fieldRequired } from "constant/validation";
+import { LoadingContext } from "contexts/LoadingContext";
+import { useFormik } from "formik";
+import LanguagePopover from "layouts/dashboard/common/LanguagePopover";
+import type { AuthLoginFormModel } from "models/view/auth";
+import { useSnackbar } from "notistack";
+import { useTranslation } from "react-i18next";
+import { AuthService } from "services/auth";
+import { handleLocalStorage } from "utils/localStorage";
+import * as Yup from "yup";
 
 // ----------------------------------------------------------------------
-
-interface LoginFormModel {
-  email: string;
-  password: string;
-}
 
 export default function LoginView() {
   const theme = useTheme();
@@ -60,7 +45,7 @@ export default function LoginView() {
 
   const { openLoading, closeLoading } = useContext(LoadingContext);
 
-  const formik = useFormik<LoginFormModel>({
+  const formik = useFormik<AuthLoginFormModel>({
     validateOnChange: false,
     enableReinitialize: true,
     initialValues: {
@@ -170,7 +155,7 @@ export default function LoginView() {
           sx={{ cursor: "pointer" }}
           href={RESET_PASSWORD}
         >
-          Forgot password?
+          {t("auth.forgotPassword")}
         </Link>
       </Stack>
 
@@ -182,7 +167,7 @@ export default function LoginView() {
         color="inherit"
         onClick={() => handleSubmit()}
       >
-        Login
+        {t("auth.button.login")}
       </LoadingButton>
     </>
   );
@@ -198,13 +183,6 @@ export default function LoginView() {
         height: 1,
       }}
     >
-      {/* <Logo
-        sx={{
-          position: "fixed",
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
-        }}
-      /> */}
       <Box
         sx={{
           position: "fixed",
@@ -224,47 +202,8 @@ export default function LoginView() {
           }}
         >
           <Typography variant="h4" color="Highlight">
-            Sign in to Web Portal
+            {t("auth.loginTitle")}
           </Typography>
-
-          {/* <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link variant="subtitle2" sx={{ ml: 0.5 }}>
-              Get started
-            </Link>
-          </Typography>
-
-          <Stack direction="row" spacing={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:google-fill" color="#DF3E30" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:facebook-fill" color="#1877F2" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-            </Button>
-          </Stack> */}
 
           <Divider sx={{ my: 3 }}>
             <Typography

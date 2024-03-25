@@ -4,7 +4,7 @@ import Router from "./routes/router";
 import { DialogProvider } from "contexts/DialogContext";
 import { LoadingProvider } from "contexts/LoadingContext";
 import { SnackbarProvider } from "notistack";
-import { AuthProvider } from "contexts/AuthContext";
+import './App.css'
 
 // ----------------------------------------------------------------------
 
@@ -13,7 +13,6 @@ export default function App() {
 
   return (
     <ThemeProvider>
-      <AuthProvider>
         <LoadingProvider>
           <DialogProvider>
             <SnackbarProvider maxSnack={3} autoHideDuration={3000}>
@@ -21,7 +20,6 @@ export default function App() {
             </SnackbarProvider>
           </DialogProvider>
         </LoadingProvider>
-      </AuthProvider>
     </ThemeProvider>
   );
 }

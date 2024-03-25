@@ -1,0 +1,18 @@
+{
+  "blog": {
+    "info": {
+      "title": "Blog",
+      "subheader": "The information can be edited",
+      "default": "Information"
+    },
+    "form": {
+      "title": "Title",
+      "description": "Description",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "button": {
+        "newPost": "New post"
+    }
+  }
+}

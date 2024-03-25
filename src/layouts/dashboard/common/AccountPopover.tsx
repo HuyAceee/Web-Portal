@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -8,22 +8,23 @@ import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { account } from '_mock/account';
 import { DASHBOARD_PAGE, LOGIN_PAGE, PROFILE_PAGE } from 'constant/router';
 import { useRouter } from 'routes/hooks';
 import { handleLocalStorage } from 'utils/localStorage';
 import { ACCESS_TOKEN } from 'constant/key';
+import { AuthContext } from 'contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    label: 'path.title.home',
     icon: 'eva:home-fill',
     to: DASHBOARD_PAGE
   },
   {
-    label: 'Profile',
+    label: 'path.title.profile',
     icon: 'eva:person-fill',
     to: PROFILE_PAGE
   },
@@ -32,6 +33,8 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const { t } = useTranslation()
+  const { userInfo: account } = useContext(AuthContext)
   const router = useRouter();
   const { removeLocalStorage } = handleLocalStorage();
   const [open, setOpen] = useState(null);
@@ -64,15 +67,15 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={account.photoURL}
-          alt={account.displayName}
+          src={account.imageUrl}
+          alt={account.name}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
+          {account.name?.charAt(0)?.toUpperCase()}
         </Avatar>
       </IconButton>
 
@@ -93,7 +96,7 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {account.name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {account.email}
@@ -107,7 +110,7 @@ export default function AccountPopover() {
             router.push(option.to)
             handleClose()
           }}>
-            {option.label}
+            {t(option.label)}
           </MenuItem>
         ))}
 
@@ -119,7 +122,7 @@ export default function AccountPopover() {
           onClick={handleLogout}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
-          Logout
+          {t("action.logout")}
         </MenuItem>
       </Popover>
     </>

@@ -17,61 +17,110 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FormHelperText } from "@mui/material";
 import { phoneNumberRegex } from "constant/regex";
-import { useTranslation } from 'react-i18next';
-import { fieldEmail, fieldPhoneNumber, fieldRequired } from "constant/validation";
+import { useTranslation } from "react-i18next";
+import {
+  fieldEmail,
+  fieldPhoneNumber,
+  fieldRequired,
+} from "constant/validation";
+import { AuthContext } from "contexts/AuthContext";
+import type { UserInformationModel } from "models/view/user";
+import { convertObjectWithDefaults, isAdmin } from "utils/common";
+import { AuthService } from "services/auth";
+import { useSnackbar } from "notistack";
+import { ClassroomService } from "services/classroom";
+import type { ClassroomModel } from "models/view/classroom";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
+import { UploadService } from "services/upload";
 
-interface ProfileModel {
-  name: string;
-  email: string;
-  class: string;
-  gender: string;
-  birthday: string;
-  phoneNumber: string;
+interface AccountDetailsFormProps {
+  selectedFile: any
 }
 
-export function AccountDetailsForm(): React.JSX.Element {
-  const { t } = useTranslation()
+export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): React.JSX.Element {
+  const { userInfo } = React.useContext(AuthContext);
+  const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
+  const [classroom, setClassroom] = React.useState<ClassroomModel[]>([]);
+  const getClassroom = async () => {
+    try {
+      const data = await ClassroomService.getList();
+      setClassroom(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const genders = [
-    { value: "male", label: t("profile.options.gender.male") },
-    { value: "female", label: t("profile.options.gender.female") }
+    { value: 0, label: t("profile.options.gender.male") },
+    { value: 1, label: t("profile.options.gender.female") },
   ];
 
-  const formik = useFormik<ProfileModel>({
+  const classroomOptions = React.useMemo(() => {
+    return classroom.map((i) => ({ value: i.id, label: i.name }));
+  }, [classroom]);
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required(t(fieldRequired)),
+    email: Yup.string().required(t(fieldRequired)).email(t(fieldEmail)),
+    isFemale: Yup.number().required(t(fieldRequired)),
+    birthDate: Yup.string().required(t(fieldRequired)),
+    phoneNumber: Yup.string()
+      .required(t(fieldRequired))
+      .matches(phoneNumberRegex, t(fieldPhoneNumber)),
+    ...(!isAdmin(userInfo.role)
+      ? { classroom: Yup.string().required() }
+      : {}),
+  });
+
+  const formik = useFormik<UserInformationModel>({
     validateOnChange: true,
     enableReinitialize: true,
-    initialValues: {
-      name: "",
-      email: "",
-      class: "",
-      gender: genders[0].value,
-      birthday: "",
-      phoneNumber: "",
-    },
-    validationSchema: Yup.object({
-      name: Yup.string().required(t(fieldRequired)),
-      email: Yup.string().required().email(t(fieldEmail)),
-      class: Yup.string().required(),
-      gender: Yup.string().required(),
-      birthday: Yup.string().required(),
-      phoneNumber: Yup.string().required().matches(phoneNumberRegex, t(fieldPhoneNumber)),
+    initialValues: convertObjectWithDefaults<UserInformationModel>({
+      ...userInfo,
+      isFemale: userInfo.isFemale ? 1 : 0,
     }),
-    onSubmit: async (value, { resetForm }) => {
-      console.log(value);
-      resetForm()
+    validationSchema,
+    onSubmit: async (value) => {
+      try {
+        const formData = new FormData();
+        formData.append("file", selectedFile);
+        const { data: imageUrl } = await UploadService.upload(formData);
+        await AuthService.updateUserInfo({ ...value, imageUrl });
+        enqueueSnackbar(t("notification.title.updateProfileSuccess"), {
+          variant: "success",
+        });
+      } catch (error) {
+        enqueueSnackbar(t("notification.title.updateProfileFail"), {
+          variant: "error",
+        });
+      }
     },
   });
 
-  const { errors, handleChange, values, handleSubmit, touched } = formik;
+  const { errors, handleChange, values, handleSubmit, touched, setFieldValue } =
+    formik;
+
+  React.useEffect(() => {
+    getClassroom();
+  }, []);
+
   return (
     <Card>
-      <CardHeader subheader={t('profile.content.subheader')} title={t('profile.content.title')} />
+      <CardHeader
+        subheader={t("profile.content.subheader")}
+        title={t("profile.content.title")}
+      />
       <Divider />
       <CardContent>
         <Grid container padding={3} spacing={3}>
           <Grid md={6} xs={12}>
             <FormControl fullWidth required>
-              <InputLabel>{t('profile.form.accountName')}</InputLabel>
+              <InputLabel>{t("profile.form.accountName")}</InputLabel>
               <OutlinedInput
                 label="Account name"
                 name="name"
@@ -88,7 +137,7 @@ export function AccountDetailsForm(): React.JSX.Element {
           </Grid>
           <Grid md={6} xs={12}>
             <FormControl fullWidth required>
-              <InputLabel>{t('profile.form.emailAddress')}</InputLabel>
+              <InputLabel>{t("profile.form.emailAddress")}</InputLabel>
               <OutlinedInput
                 label="Email address"
                 name="email"
@@ -103,67 +152,82 @@ export function AccountDetailsForm(): React.JSX.Element {
               )}
             </FormControl>
           </Grid>
+          {!isAdmin && (
+            <Grid md={6} xs={12}>
+              <FormControl fullWidth required>
+                <InputLabel>{t("profile.form.class")}</InputLabel>
+                <Select
+                  label="Classroom"
+                  name="classroom"
+                  value={values.classroom}
+                  onChange={handleChange}
+                  variant="outlined"
+                  error={!!errors.classroom && touched.classroom}
+                >
+                  {classroomOptions.map((option, index) => (
+                    <MenuItem key={index.toString()} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {!!errors.classroom && touched.classroom && (
+                  <FormHelperText error id="accountId-error">
+                    {errors.classroom}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            </Grid>
+          )}
+
           <Grid md={6} xs={12}>
             <FormControl fullWidth required>
-              <InputLabel>{t('profile.form.class')}</InputLabel>
-              <OutlinedInput
-                label="Class"
-                name="class"
-                value={values.class}
-                onChange={handleChange}
-                error={!!errors.class && touched.class}
-              />
-              {!!errors.class && touched.class && (
-                <FormHelperText error id="accountId-error">
-                  {errors.class}
-                </FormHelperText>
-              )}
-            </FormControl>
-          </Grid>
-          <Grid md={6} xs={12}>
-            <FormControl fullWidth required>
-              <InputLabel>{t('profile.form.gender')}</InputLabel>
+              <InputLabel>{t("profile.form.gender")}</InputLabel>
               <Select
                 label="State"
-                name="gender"
-                value={values.gender}
+                name="isFemale"
+                value={values.isFemale}
                 onChange={handleChange}
                 variant="outlined"
-                error={!!errors.gender && touched.gender}
+                error={!!errors.isFemale && touched.isFemale}
               >
-                {genders.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
+                {genders.map((option, index) => (
+                  <MenuItem key={index.toString()} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
               </Select>
-              {!!errors.gender && touched.gender && (
+              {!!errors.isFemale && touched.isFemale && (
                 <FormHelperText error id="accountId-error">
-                  {errors.gender}
+                  {errors.isFemale}
                 </FormHelperText>
               )}
             </FormControl>
           </Grid>
           <Grid md={6} xs={12}>
             <FormControl fullWidth required>
-              <InputLabel>{t('profile.form.birthday')}</InputLabel>
-              <OutlinedInput
-                label="Birthday"
-                name="birthday"
-                value={values.birthday}
-                onChange={handleChange}
-                error={!!errors.birthday && touched.birthday}
-              />
-              {!!errors.birthday && touched.birthday && (
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    label="Birthday"
+                    name="birthDate"
+                    selectedSections="all"
+                    value={dayjs(values.birthDate)}
+                    onChange={(value: any) => {
+                      setFieldValue("birthDate", Date.parse(value));
+                    }}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+              {!!errors.birthDate && touched.birthDate && (
                 <FormHelperText error id="accountId-error">
-                  {errors.birthday}
+                  {errors.birthDate}
                 </FormHelperText>
               )}
             </FormControl>
           </Grid>
           <Grid md={6} xs={12}>
             <FormControl fullWidth>
-              <InputLabel>{t('profile.form.phoneNumber')}</InputLabel>
+              <InputLabel>{t("profile.form.phoneNumber")}</InputLabel>
               <OutlinedInput
                 label="Phone number"
                 type="number"
@@ -188,7 +252,7 @@ export function AccountDetailsForm(): React.JSX.Element {
           type="submit"
           onClick={() => handleSubmit()}
         >
-          {t('profile.action.save')}
+          {t("profile.action.save")}
         </Button>
       </CardActions>
     </Card>

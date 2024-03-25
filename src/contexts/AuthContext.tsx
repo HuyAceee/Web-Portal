@@ -13,7 +13,7 @@ interface AuthContextModel {
 }
 
 export const AuthContext = createContext<AuthContextModel>({
-  userInfo: {} as UserInformationModel
+  userInfo: {} as UserInformationModel,
 });
 
 interface IAuthProviderProps {
@@ -22,27 +22,27 @@ interface IAuthProviderProps {
 
 export function AuthProvider({ children }: IAuthProviderProps) {
   const { t } = useTranslation();
-  const { removeLocalStorage, getLocalStorage } = handleLocalStorage()
-  const accessToken = getLocalStorage(ACCESS_TOKEN)
+  const { removeLocalStorage, getLocalStorage } = handleLocalStorage();
+  const accessToken = getLocalStorage(ACCESS_TOKEN);
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
-  const [userInfo, setUserInfo] = useState({} as UserInformationModel)
-  const handleGetUserInfor = async() => {
+  const [userInfo, setUserInfo] = useState({} as UserInformationModel);
+  const handleGetUserInfor = async () => {
     try {
-      const { data } = await UserService.getUserInfo()
-      if (!data) return
-      setUserInfo(data)
+      const { data } = await UserService.getUserInfo();
+      if (!data) return;
+      setUserInfo(data);
     } catch (error) {
       enqueueSnackbar(t("notification.title.loginFail"), {
         variant: "warning",
       });
-      removeLocalStorage(ACCESS_TOKEN)
+      removeLocalStorage(ACCESS_TOKEN);
       router.push(LOGIN_PAGE);
     }
-  }
+  };
   useEffect(() => {
-    handleGetUserInfor()
-  }, [accessToken])
+    handleGetUserInfor();
+  }, [accessToken]);
 
   return (
     <AuthContext.Provider

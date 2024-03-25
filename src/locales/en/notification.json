@@ -5,16 +5,25 @@
       "agree": "Agree"
     },
     "title": {
+      "success": "Success!",
+      "fail": "Fail!",
       "default": "Notification",
       "confirmChangePassword": "Confirm password change",
       "loginSuccess": "Login success!",
       "loginFail": "Login fail!",
-      "loginAgain": "Please login again!"
+      "loginAgain": "Please login again!",
+      "updateProfileSuccess": "Update profile success!",
+      "updateProfileFail": "Update profile fail!",
+      "createSuccess": "Create success!",
+      "createFail": "Create fail!",
+      "pleaseChooseImage": "Please choose image"
     },
     "content": {
       "confirmChangePassword": "Do you want to change your password?",
-      "changePasswordSuccess": "You have successfully changed your password",
-      "changePasswordFail": "You have failed to change your password"
+      "changePasswordSuccess": "You have successfully changed your password. Please login again!",
+      "changePasswordFail": "You have failed to change your password",
+      "resetPasswordSuccess": "The new password has been sent to your email account. Please log in again!",
+      "resetPasswordFail": "You have failed to reset your password"
     }
   }
 }

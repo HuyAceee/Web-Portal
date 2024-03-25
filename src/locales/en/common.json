@@ -1,0 +1,27 @@
+{
+  "title": {
+    "dasboard": "Dasboard",
+    "blog": "Blog",
+    "changePassword": "Change Password",
+    "login": "Login",
+    "notFound": "Page Not Found",
+    "profile": "Profile",
+    "resetPassword": "Reset Password",
+    "user": "User",
+    "contactAdmin": "Contact Admin",
+    "notification": "Notification"
+  },
+  "path": {
+    "title": {
+      "home": "Home",
+      "profile": "Profile"
+    }
+  },
+  "error": {
+    "notFound": {
+      "title": "Sorry, page not found!",
+      "description": "Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be sure to check your spelling.",
+      "toHome": "Go to Home"
+    }
+  }
+}

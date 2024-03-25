@@ -8,4 +8,11 @@ export interface UserInformationModel {
   imageUrl: string;
   role: RoleEnum;
   classroom: string;
+  isFemale: boolean;
+}
+
+export interface ChangePasswordFormModel {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
 }

@@ -1,39 +1,56 @@
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
-import Typography from '@mui/material/Typography';
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Unstable_Grid2";
 
-import { posts } from '_mock/blog';
+import Iconify from "components/Iconify";
 
-import Iconify from 'components/Iconify';
-
-import PostCard from '../PostCard';
-import PostSort from '../PortSort';
-import PostSearch from '../PostSearch';
+import { NOTIFICATION } from "constant/router";
+import type { NotificationModel } from "models/view/notification";
+import { useEffect, useState } from "react";
+import { RouterLink } from "routes/components";
+import { NotificationService } from "services/notification";
+import PostCard from "../PostCard";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
 export default function BlogView() {
+  const { t } = useTranslation();
+  const [posts, setPosts] = useState<NotificationModel[]>([]);
+  const getNotification = async () => {
+    try {
+      const data = await NotificationService.getList();
+      setPosts(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getNotification();
+  }, []);
+
   return (
     <Container>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-        <Typography variant="h4">Blog</Typography>
+      <Stack
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+        mb={5}
+      >
+        <Typography variant="h4">{t("blog.info.title")}</Typography>
 
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
-          New Post
-        </Button>
-      </Stack>
-
-      <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-        <PostSearch posts={posts} />
-        <PostSort
-          options={[
-            { value: 'latest', label: 'Latest' },
-            { value: 'popular', label: 'Popular' },
-            { value: 'oldest', label: 'Oldest' },
-          ]}
-        />
+        <RouterLink href={NOTIFICATION}>
+          <Button
+            variant="contained"
+            color="inherit"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
+            {t("blog.button.newPost")}
+          </Button>
+        </RouterLink>
       </Stack>
 
       <Grid container spacing={3}>

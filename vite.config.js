@@ -5,7 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   server: {
-    port: 5173,
+    port: 5000,
     proxy: {
       "/api": {
         changeOrigin: true,

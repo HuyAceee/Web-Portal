@@ -12,25 +12,21 @@ import InputLabel from "@mui/material/InputLabel";
 import Grid from "@mui/material/Unstable_Grid2";
 import CustomTextarea from "components/CustomTextarea";
 import { fieldRequired } from "constant/validation";
-import { DialogContext } from "contexts/DialogContext";
 import { LoadingContext } from "contexts/LoadingContext";
 import { useFormik } from "formik";
+import type { QuestionModel } from "models/view/question";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { QuestionService } from "services/question";
 import * as Yup from "yup";
-
-interface ChangePasswordFormModel {
-  question: string;
-}
 
 export default function ContactAdminForm(): JSX.Element {
   const { t } = useTranslation();
-  const { openDialog } = useContext(DialogContext);
   const { openLoading, closeLoading } = useContext(LoadingContext);
   const { enqueueSnackbar } = useSnackbar();
 
-  const formik = useFormik<ChangePasswordFormModel>({
+  const formik = useFormik<QuestionModel>({
     validateOnChange: true,
     enableReinitialize: true,
     initialValues: {
@@ -40,33 +36,25 @@ export default function ContactAdminForm(): JSX.Element {
       question: Yup.string().required(t(fieldRequired)),
     }),
     onSubmit: async (value, { resetForm }) => {
-      console.log(value);
-      resetForm();
-      openDialog?.({
-        content: t("notification.content.confirmChangePassword"),
-        title: t("notification.title.confirmChangePassword"),
-        onConfirm: () => {
-          try {
-            openLoading();
-            // await call api
-            enqueueSnackbar(t("notification.content.changePasswordSuccess"), {
-              variant: "success",
-            });
-          } catch (error) {
-            enqueueSnackbar(t("notification.content.changePasswordFail"), {
-              variant: "success",
-            });
-          } finally {
-            closeLoading();
-          }
-        },
-      });
+      try {
+        openLoading();
+        await QuestionService.create(value);
+        enqueueSnackbar(t("notification.title.success"), {
+          variant: "success",
+        });
+        resetForm();
+      } catch (error) {
+        enqueueSnackbar(t("notification.title.fail"), {
+          variant: "error",
+        });
+      } finally {
+        closeLoading();
+      }
     },
   });
 
   const { errors, handleChange, values, handleSubmit, touched } = formik;
 
-  console.log(errors, values)
   return (
     <Card sx={{ marginBottom: 2 }}>
       <CardHeader
@@ -76,7 +64,9 @@ export default function ContactAdminForm(): JSX.Element {
       <Divider />
       <CardContent>
         <Grid container padding={3} spacing={3} mt={1} mb={1}>
-          <InputLabel required sx={{ marginBottom: 2 }}>{t("contactAdmin.form.question")}</InputLabel>
+          <InputLabel required sx={{ marginBottom: 2 }}>
+            {t("contactAdmin.form.question")}
+          </InputLabel>
           <FormControl fullWidth required>
             <CustomTextarea
               name="question"

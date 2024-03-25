@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Backdrop,
-  CircularProgress,
-  FormHelperText,
-  Theme,
-} from "@mui/material";
+import { FormHelperText } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -16,6 +11,8 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Grid from "@mui/material/Unstable_Grid2";
+import { ACCESS_TOKEN } from "constant/key";
+import { LOGIN_PAGE } from "constant/router";
 import {
   fieldConfirmPasswordNotMatch,
   fieldRequired,
@@ -23,22 +20,22 @@ import {
 import { DialogContext } from "contexts/DialogContext";
 import { LoadingContext } from "contexts/LoadingContext";
 import { useFormik } from "formik";
+import type { ChangePasswordFormModel } from "models/view/user";
 import { useSnackbar } from "notistack";
 import { useContext } from "react";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "routes/hooks";
+import { UserService } from "services/user";
+import { handleLocalStorage } from "utils/localStorage";
 import * as Yup from "yup";
-
-interface ChangePasswordFormModel {
-  oldPassword: string;
-  newPassword: string;
-  confirmPassword: string;
-}
 
 export function ChangePasswordForm(): JSX.Element {
   const { t } = useTranslation();
   const { openDialog } = useContext(DialogContext);
   const { openLoading, closeLoading } = useContext(LoadingContext);
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter()
+  const { removeLocalStorage } = handleLocalStorage()
 
   const formik = useFormik<ChangePasswordFormModel>({
     validateOnChange: false,
@@ -55,19 +52,23 @@ export function ChangePasswordForm(): JSX.Element {
         .required()
         .oneOf([Yup.ref("newPassword")], t(fieldConfirmPasswordNotMatch)),
     }),
-    onSubmit: async (value, { resetForm }) => {
-      console.log(value);
-      resetForm();
+    onSubmit: async (value) => {
       openDialog?.({
         content: t("notification.content.confirmChangePassword"),
         title: t("notification.title.confirmChangePassword"),
-        onConfirm: () => {
+        onConfirm: async () => {
           try {
             openLoading();
-            // await call api
-            enqueueSnackbar(t("notification.content.changePasswordSuccess"), { variant: "success" })
+            await UserService.changePassword(value);
+            enqueueSnackbar(t("notification.content.changePasswordSuccess"), {
+              variant: "success",
+            });
+            removeLocalStorage(ACCESS_TOKEN)
+            router.push(LOGIN_PAGE)
           } catch (error) {
-            enqueueSnackbar(t("notification.content.changePasswordFail"), { variant: "success" })
+            enqueueSnackbar(t("notification.content.changePasswordFail"), {
+              variant: "success",
+            });
           } finally {
             closeLoading();
           }
@@ -106,7 +107,7 @@ export function ChangePasswordForm(): JSX.Element {
           <FormControl fullWidth required>
             <InputLabel>{t("profile.form.newPassword")}</InputLabel>
             <OutlinedInput
-              label="Old Password"
+              label="New Password"
               name="newPassword"
               value={values.newPassword}
               onChange={handleChange}

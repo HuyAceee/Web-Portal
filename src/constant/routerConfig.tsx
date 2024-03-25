@@ -3,6 +3,7 @@ import {
   BLOG_PAGE,
   CHANGE_PASSWORD_PAGE,
   CONTACT_ADMIN,
+  NOTIFICATION,
   PRODUCTS_PAGE,
   PROFILE_PAGE,
   USER_PAGE,
@@ -22,7 +23,8 @@ const BlogPage = lazy(() => import("pages/Blog"));
 const ProductsPage = lazy(() => import("pages/Products"));
 const ProfilePage = lazy(() => import("pages/Profile"));
 const ChangePasswordPage = lazy(() => import("pages/ChangePassword"));
-const ContactAdmin = lazy(() => import("pages/user/ContactAdmin"));
+const ContactAdminPage = lazy(() => import("pages/user/ContactAdmin"));
+const NotificationPage = lazy(() => import("pages/admin/Notification"));
 
 interface RouterItemModel {
   index?: boolean;
@@ -43,7 +45,7 @@ export const routerUser: RouterItemModel[] = [
   },
   { path: PROFILE_PAGE, element: ProfilePage, title: "profile", icon: icon("ic_profile"), },
   { path: CHANGE_PASSWORD_PAGE, element: ChangePasswordPage, isHiddenMenu: true },
-  { path: CONTACT_ADMIN, element: ContactAdmin, title: "contact", icon: icon("ic_contact-admin"), },
+  { path: CONTACT_ADMIN, element: ContactAdminPage, title: "contact", icon: icon("ic_contact-admin"), },
 ];
 
 export const routerAdmin: RouterItemModel[] = [
@@ -54,6 +56,7 @@ export const routerAdmin: RouterItemModel[] = [
     title: "dashboard",
     icon: icon("ic_analytics"),
   },
+  { path: PROFILE_PAGE, element: ProfilePage, title: "profile", icon: icon("ic_profile"), },
   { path: USER_PAGE, element: UserPage, title: "user", icon: icon("ic_user") },
   {
     path: PRODUCTS_PAGE,
@@ -61,5 +64,8 @@ export const routerAdmin: RouterItemModel[] = [
     title: "product",
     icon: icon("ic_cart"),
   },
+  { path: CHANGE_PASSWORD_PAGE, element: ChangePasswordPage, isHiddenMenu: true },
   { path: BLOG_PAGE, element: BlogPage, title: "blog", icon: icon("ic_blog") },
+  { path: NOTIFICATION, element: NotificationPage, title: "notification", icon: icon("ic_blog") },
+  { path: CONTACT_ADMIN, element: ContactAdminPage, title: "contact", icon: icon("ic_contact-admin"), },
 ];

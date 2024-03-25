@@ -2,9 +2,10 @@ import { LOGIN_PAGE, NOT_FOUND_PAGE, RESET_PASSWORD } from "constant/router";
 import { routerAdmin, routerUser } from "constant/routerConfig";
 import { AuthContext } from "contexts/AuthContext";
 import DashboardLayout from "layouts/dashboard";
-import { RoleEnum } from "models/common";
 import { Suspense, lazy, useContext } from "react";
 import { Navigate, Outlet, useRoutes } from "react-router-dom";
+import { AuthProvider } from "contexts/AuthContext";
+import { isAdmin } from "utils/common";
 
 // ----------------------------------------------------------------------
 
@@ -15,16 +16,17 @@ export const ResetPasswordPage = lazy(() => import("pages/ResetPassword"));
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { userInfo } = useContext(AuthContext)
-  console.log(userInfo)
-  const router = userInfo.role !== RoleEnum.USER ? routerUser : routerAdmin
+  const { userInfo } = useContext(AuthContext);
+  const router = isAdmin(userInfo.role) ? routerAdmin : routerUser;
   const routes = useRoutes([
     {
       element: (
         <DashboardLayout>
-          <Suspense>
-            <Outlet />
-          </Suspense>
+          <AuthProvider>
+            <Suspense>
+              <Outlet />
+            </Suspense>
+          </AuthProvider>
         </DashboardLayout>
       ),
       children: router?.map((router) => {

@@ -1,14 +1,16 @@
-import { Helmet } from 'react-helmet-async';
+import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 
-import { UserView } from 'sections/user/view';
+import { UserView } from "sections/user/view";
 
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
+  const { t } = useTranslation();
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> {t("title.user")} </title>
       </Helmet>
 
       <UserView />

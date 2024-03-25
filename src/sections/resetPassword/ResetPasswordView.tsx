@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import LoadingButton from "@mui/lab/LoadingButton";
 import Box from "@mui/material/Box";
@@ -15,13 +15,15 @@ import { useRouter } from "routes/hooks";
 import { bgGradient } from "theme/css";
 
 import { FormHelperText } from "@mui/material";
-import { DASHBOARD_PAGE, LOGIN_PAGE } from "constant/router";
+import { LOGIN_PAGE } from "constant/router";
 import { fieldEmail, fieldRequired } from "constant/validation";
+import { DialogContext } from "contexts/DialogContext";
 import { LoadingContext } from "contexts/LoadingContext";
 import { useFormik } from "formik";
 import LanguagePopover from "layouts/dashboard/common/LanguagePopover";
 import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
+import { AuthService } from "services/auth";
 import * as Yup from "yup";
 
 // ----------------------------------------------------------------------
@@ -35,11 +37,12 @@ export default function ResetPasswordView() {
   const { t } = useTranslation();
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const { openDialog } = useContext(DialogContext);
 
   const { openLoading, closeLoading } = useContext(LoadingContext);
 
   const formik = useFormik<ResetPasswordFormModel>({
-    validateOnChange: false,
+    validateOnChange: true,
     enableReinitialize: true,
     initialValues: {
       email: "",
@@ -47,19 +50,20 @@ export default function ResetPasswordView() {
     validationSchema: Yup.object({
       email: Yup.string().required(t(fieldRequired)).email(t(fieldEmail)),
     }),
-    onSubmit: async (value, { resetForm }) => {
-      console.log(value);
-      resetForm();
+    onSubmit: async (value) => {
       try {
         openLoading();
-        // await call api
-        enqueueSnackbar(t("notification.content.changePasswordSuccess"), {
-          variant: "success",
+        await AuthService.resetPassword(value);
+        openDialog?.({
+          title: t("notification.title.success"),
+          content: t("notification.content.resetPasswordSuccess"),
+          onConfirm() {
+            router.push(LOGIN_PAGE);
+          },
         });
-        router.push(DASHBOARD_PAGE)
       } catch (error) {
-        enqueueSnackbar(t("notification.content.changePasswordFail"), {
-          variant: "success",
+        enqueueSnackbar(t("notification.content.resetPasswordFail"), {
+          variant: "error",
         });
       } finally {
         closeLoading();
@@ -98,7 +102,7 @@ export default function ResetPasswordView() {
           sx={{ cursor: "pointer" }}
           href={LOGIN_PAGE}
         >
-          Login
+          {t("auth.button.login")}
         </Link>
       </Stack>
 
@@ -110,7 +114,7 @@ export default function ResetPasswordView() {
         color="inherit"
         onClick={() => handleSubmit()}
       >
-        Send
+        {t("action.send")}
       </LoadingButton>
     </>
   );
@@ -126,13 +130,6 @@ export default function ResetPasswordView() {
         height: 1,
       }}
     >
-      {/* <Logo
-        sx={{
-          position: "fixed",
-          top: { xs: 16, md: 24 },
-          left: { xs: 16, md: 24 },
-        }}
-      /> */}
       <Box
         sx={{
           position: "fixed",
@@ -152,44 +149,12 @@ export default function ResetPasswordView() {
           }}
         >
           <Typography variant="h4" color="Highlight">
-            Reset password
+            {t("auth.resetPassword")}
           </Typography>
 
           <Typography variant="body2" sx={{ mt: 1, mb: 3 }}>
-            Please enter your email !
+            {t("auth.enterEmail")}
           </Typography>
-
-          {/* <Stack direction="row" spacing={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:google-fill" color="#DF3E30" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:facebook-fill" color="#1877F2" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-            </Button>
-          </Stack> */}
 
           <Divider sx={{ my: 2 }}>
             <Typography

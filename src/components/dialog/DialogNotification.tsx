@@ -47,9 +47,10 @@ export default function DialogNotification({
         keepMounted
         onClose={onCancel}
         aria-describedby="alert-dialog-slide-description"
+        
       >
         <DialogTitle>{t(title)}</DialogTitle>
-        <DialogContent>
+        <DialogContent sx={{ maxWidth: 500 }}>
           <DialogContentText id="alert-dialog-slide-description">
             {t(content)}
           </DialogContentText>
