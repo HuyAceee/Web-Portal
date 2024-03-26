@@ -13,15 +13,13 @@ import { usePathname } from "routes/hooks";
 
 import { useResponsive } from "hooks/useResponsive";
 
-import { account } from "_mock/account";
-
 import Logo from "components/Logo";
 import Scrollbar from "components/Scrollbar";
 
 import { routerAdmin, routerUser } from "constant/routerConfig";
 import { AuthContext } from "contexts/AuthContext";
 import { NAV } from "./ConfigLayout";
-import { isAdmin } from "utils/common";
+import { convertImageUrl, isAdmin } from "utils/common";
 
 // ----------------------------------------------------------------------
 
@@ -52,13 +50,13 @@ export default function Nav({ openNav, onCloseNav }: any) {
         bgcolor: (theme) => alpha(theme.palette.grey[500], 0.12),
       }}
     >
-      <Avatar src={account.photoURL} alt="photoURL" />
+      <Avatar src={convertImageUrl(userInfo.imageUrl)} alt={userInfo.name} />
 
       <Box sx={{ ml: 2 }}>
-        <Typography variant="subtitle2">{account.displayName}</Typography>
+        <Typography variant="subtitle2">{userInfo.name}</Typography>
 
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {(account as any).role}
+          {userInfo.role}
         </Typography>
       </Box>
     </Box>

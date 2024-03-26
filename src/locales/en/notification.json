@@ -2,12 +2,13 @@
   "notification": {
     "button": {
       "cancel": "Cancel",
-      "agree": "Agree"
+      "agree": "Agree",
+      "newNotification": "New notification"
     },
     "title": {
       "success": "Success!",
       "fail": "Fail!",
-      "default": "Notification",
+      "default": "Notifications",
       "confirmChangePassword": "Confirm password change",
       "loginSuccess": "Login success!",
       "loginFail": "Login fail!",
@@ -16,14 +17,16 @@
       "updateProfileFail": "Update profile fail!",
       "createSuccess": "Create success!",
       "createFail": "Create fail!",
-      "pleaseChooseImage": "Please choose image"
+      "pleaseChooseImage": "Please choose image",
+      "confirmDelete": "Confirm delete"
     },
     "content": {
       "confirmChangePassword": "Do you want to change your password?",
       "changePasswordSuccess": "You have successfully changed your password. Please login again!",
       "changePasswordFail": "You have failed to change your password",
       "resetPasswordSuccess": "The new password has been sent to your email account. Please log in again!",
-      "resetPasswordFail": "You have failed to reset your password"
+      "resetPasswordFail": "You have failed to reset your password",
+      "confirmDelete": "Are you sure you want to delete?"
     }
   }
 }

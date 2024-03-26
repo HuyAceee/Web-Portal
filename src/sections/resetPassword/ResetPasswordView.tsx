@@ -55,8 +55,8 @@ export default function ResetPasswordView() {
         openLoading();
         await AuthService.resetPassword(value);
         openDialog?.({
-          title: t("notification.title.success"),
-          content: t("notification.content.resetPasswordSuccess"),
+          title: "notification.title.success",
+          content: "notification.content.resetPasswordSuccess",
           onConfirm() {
             router.push(LOGIN_PAGE);
           },

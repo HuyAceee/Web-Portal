@@ -1,0 +1,18 @@
+{
+  "user": {
+    "table": {
+      "header": {
+        "name": "Name",
+        "email": "Email",
+        "birthday": "Birthday",
+        "gender": "Gender",
+        "phoneNumber": "Phone Number"
+      }
+    },
+    "title": "Users",
+    "button": {
+      "newUser": "New User"
+    },
+    "notFound": "Not found"
+  }
+}

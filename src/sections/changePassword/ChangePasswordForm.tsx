@@ -54,8 +54,8 @@ export function ChangePasswordForm(): JSX.Element {
     }),
     onSubmit: async (value) => {
       openDialog?.({
-        content: t("notification.content.confirmChangePassword"),
-        title: t("notification.title.confirmChangePassword"),
+        content: "notification.content.confirmChangePassword",
+        title: "notification.title.confirmChangePassword",
         onConfirm: async () => {
           try {
             openLoading();

@@ -1,16 +1,17 @@
 "use client";
 
-import { Fragment, useContext } from "react";
+import { ROLE } from "constant/key";
+import { Fragment } from "react";
+import { isAdmin } from "utils/common";
+import { handleLocalStorage } from "utils/localStorage";
 import ContactAdminForm from "../ContactAdminForm";
 import ContactAdminHistoryQuestions from "../ContactAdminHistoryQuestions";
-import { AuthContext } from "contexts/AuthContext";
-import { isAdmin } from "utils/common";
 
 export default function ContactAdminView(): JSX.Element {
-  const { userInfo } = useContext(AuthContext);
+  const { getLocalStorage } = handleLocalStorage()
   return (
     <Fragment>
-      {!isAdmin(userInfo.role) && <ContactAdminForm />}
+      {!isAdmin(getLocalStorage(ROLE)) && <ContactAdminForm />}
       <ContactAdminHistoryQuestions />
     </Fragment>
   );

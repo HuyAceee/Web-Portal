@@ -14,4 +14,7 @@ export const AuthService = {
   resetPassword: async (data: ResetPasswordFormModel): Promise<BaseResponseModel<string>> => {
     return api.post(API_PATH.AUTH + '/reset_password', data)
   },
+  register: async (data: UserInformationModel): Promise<BaseResponseModel<string>> => {
+    return api.post(API_PATH.AUTH + '/register', data)
+  },
 };

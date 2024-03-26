@@ -13,4 +13,7 @@ export const UserService = {
   getList: async (): Promise<BaseResponseModel<UserInformationModel[]>> => {
     return api.get(API_PATH.USER + '/list')
   },
+  delete: async (email: string): Promise<BaseResponseModel<string>> => {
+    return api.post(API_PATH.USER + '/delete?email=' + email)
+  },
 }

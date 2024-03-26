@@ -7,9 +7,11 @@ import { useTranslation } from "react-i18next";
 import { RouterLink } from "routes/components";
 import { AccountDetailsForm } from "sections/account/AccountDetailsForm";
 import { AccountInfo } from "sections/account/AccountInfo";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "contexts/AuthContext";
 
 export default function ProfileView(): React.JSX.Element {
+  const { userInfo } = useContext(AuthContext)
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState();
   return (
@@ -24,10 +26,10 @@ export default function ProfileView(): React.JSX.Element {
       </Grid>
       <Grid container spacing={3}>
         <Grid lg={4} md={6} xs={12}>
-          <AccountInfo selectedFile={selectedFile} setSelectedFile={setSelectedFile} />
+          <AccountInfo selectedFile={selectedFile} setSelectedFile={setSelectedFile} defaultData={userInfo} />
         </Grid>
         <Grid lg={8} md={6} xs={12}>
-          <AccountDetailsForm selectedFile={selectedFile} />
+          <AccountDetailsForm selectedFile={selectedFile} defaultData={userInfo} />
         </Grid>
       </Grid>
     </Stack>

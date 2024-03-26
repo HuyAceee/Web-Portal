@@ -22,6 +22,7 @@ import Iconify from "components/Iconify";
 import { ACCESS_TOKEN } from "constant/key";
 import { DASHBOARD_PAGE, RESET_PASSWORD } from "constant/router";
 import { fieldEmail, fieldRequired } from "constant/validation";
+import { AuthContext } from "contexts/AuthContext";
 import { LoadingContext } from "contexts/LoadingContext";
 import { useFormik } from "formik";
 import LanguagePopover from "layouts/dashboard/common/LanguagePopover";
@@ -40,6 +41,7 @@ export default function LoginView() {
   const router = useRouter();
   const { setLocalStorage } = handleLocalStorage();
   const { enqueueSnackbar } = useSnackbar();
+  const { handleGetUserInfor } = useContext(AuthContext)
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -56,16 +58,15 @@ export default function LoginView() {
       email: Yup.string().required(t(fieldRequired)).email(t(fieldEmail)),
       password: Yup.string().required(t(fieldRequired)),
     }),
-    onSubmit: async (value, { resetForm }) => {
-      resetForm();
+    onSubmit: async (value) => {
       try {
         openLoading();
         const { data: accessToken } = await AuthService.login(value);
-
         setLocalStorage(ACCESS_TOKEN, accessToken);
         enqueueSnackbar(t("notification.title.loginSuccess"), {
           variant: "success",
         });
+        await handleGetUserInfor()
         router.push(DASHBOARD_PAGE);
       } catch (error) {
         enqueueSnackbar(t("notification.title.loginFail"), {

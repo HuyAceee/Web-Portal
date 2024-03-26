@@ -12,6 +12,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { AuthContext } from "contexts/AuthContext";
 import { convertImageUrl } from "utils/common";
+import type { UserInformationModel } from "models/view/user";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -28,10 +29,10 @@ const VisuallyHiddenInput = styled("input")({
 interface AccountInfoProps {
   selectedFile: any
   setSelectedFile: Dispatch<SetStateAction<undefined>>
+  defaultData?: UserInformationModel
 }
 
-export function AccountInfo({ selectedFile, setSelectedFile }: AccountInfoProps): React.JSX.Element {
-  const { userInfo: user } = useContext(AuthContext)
+export function AccountInfo({ selectedFile, setSelectedFile, defaultData = {} as UserInformationModel }: AccountInfoProps): React.JSX.Element {
   const { t } = useTranslation();
 
   const handleUploadFile = () => {
@@ -67,15 +68,15 @@ export function AccountInfo({ selectedFile, setSelectedFile }: AccountInfoProps)
       <CardContent>
         <Stack spacing={2} sx={{ alignItems: "center" }}>
           <div>
-            <Avatar src={preview ?? convertImageUrl(user.imageUrl)} sx={{ height: "100px", width: "100px" }} />
+            <Avatar src={preview ?? convertImageUrl(defaultData.imageUrl)} sx={{ height: "100px", width: "100px" }} />
           </div>
           <Stack spacing={1} sx={{ textAlign: "center" }}>
-            <Typography variant="h5">{user.name}</Typography>
+            <Typography variant="h5">{defaultData.name}</Typography>
             <Typography color="text.secondary" variant="body2">
-              {user.email}
+              {defaultData.email}
             </Typography>
             <Typography color="text.secondary" variant="body2">
-              {user.phoneNumber}
+              {defaultData.phoneNumber}
             </Typography>
           </Stack>
         </Stack>

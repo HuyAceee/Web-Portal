@@ -1,4 +1,6 @@
+import { FORMAT_DATE_YYYY_MM_DD } from 'constant';
 import { format, getTime, formatDistanceToNow } from 'date-fns';
+import dayjs from 'dayjs';
 
 // ----------------------------------------------------------------------
 
@@ -24,4 +26,8 @@ export function fToNow(date: string) {
         addSuffix: true,
       })
     : '';
+}
+
+export function formatDate_YYYY_MM_DD(date: string = "", format: string = FORMAT_DATE_YYYY_MM_DD) {
+  return dayjs(date).format(format)
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import { FormHelperText } from "@mui/material";
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -13,39 +13,60 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
 import Grid from "@mui/material/Unstable_Grid2";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import { FormHelperText } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { ROLE } from "constant/key";
 import { phoneNumberRegex } from "constant/regex";
-import { useTranslation } from "react-i18next";
+import { NEW_USER, PROFILE_PAGE, USER_PAGE } from "constant/router";
 import {
   fieldEmail,
   fieldPhoneNumber,
   fieldRequired,
 } from "constant/validation";
-import { AuthContext } from "contexts/AuthContext";
-import type { UserInformationModel } from "models/view/user";
-import { convertObjectWithDefaults, isAdmin } from "utils/common";
-import { AuthService } from "services/auth";
-import { useSnackbar } from "notistack";
-import { ClassroomService } from "services/classroom";
-import type { ClassroomModel } from "models/view/classroom";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
+import { useFormik } from "formik";
+import type { ClassroomModel } from "models/view/classroom";
+import type { UserInformationModel } from "models/view/user";
+import { useSnackbar } from "notistack";
+import * as React from "react";
+import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
+import { usePathname, useRouter } from "routes/hooks";
+import { AuthService } from "services/auth";
+import { ClassroomService } from "services/classroom";
 import { UploadService } from "services/upload";
+import { convertObjectWithDefaults, isAdmin } from "utils/common";
+import { handleLocalStorage } from "utils/localStorage";
+import * as Yup from "yup";
 
 interface AccountDetailsFormProps {
-  selectedFile: any
+  selectedFile: any;
+  defaultData?: UserInformationModel;
 }
 
-export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): React.JSX.Element {
-  const { userInfo } = React.useContext(AuthContext);
+interface UserFormQueriesModel {
+  email?: string
+}
+
+const genders = [
+  { value: 0, label: "profile.options.gender.male" },
+  { value: 1, label: "profile.options.gender.female" },
+];
+
+export function AccountDetailsForm({
+  selectedFile,
+  defaultData = {} as UserInformationModel,
+}: AccountDetailsFormProps): React.JSX.Element {
+  const [searchParams] = useSearchParams();
+  const pathname = usePathname();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
+  const { getLocalStorage } = handleLocalStorage();
+  const router = useRouter()
   const [classroom, setClassroom] = React.useState<ClassroomModel[]>([]);
+  const allParams: UserFormQueriesModel = Object.fromEntries(searchParams as unknown as Iterable<readonly any[]>);
   const getClassroom = async () => {
     try {
       const data = await ClassroomService.getList();
@@ -54,11 +75,6 @@ export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): R
       console.log(error);
     }
   };
-
-  const genders = [
-    { value: 0, label: t("profile.options.gender.male") },
-    { value: 1, label: t("profile.options.gender.female") },
-  ];
 
   const classroomOptions = React.useMemo(() => {
     return classroom.map((i) => ({ value: i.id, label: i.name }));
@@ -72,30 +88,46 @@ export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): R
     phoneNumber: Yup.string()
       .required(t(fieldRequired))
       .matches(phoneNumberRegex, t(fieldPhoneNumber)),
-    ...(!isAdmin(userInfo.role)
-      ? { classroom: Yup.string().required() }
-      : {}),
   });
 
   const formik = useFormik<UserInformationModel>({
     validateOnChange: true,
     enableReinitialize: true,
     initialValues: convertObjectWithDefaults<UserInformationModel>({
-      ...userInfo,
-      isFemale: userInfo.isFemale ? 1 : 0,
+      ...defaultData,
+      isFemale: defaultData.isFemale ? 1 : 0,
     }),
     validationSchema,
     onSubmit: async (value) => {
       try {
-        const formData = new FormData();
-        formData.append("file", selectedFile);
-        const { data: imageUrl } = await UploadService.upload(formData);
-        await AuthService.updateUserInfo({ ...value, imageUrl });
-        enqueueSnackbar(t("notification.title.updateProfileSuccess"), {
+        let imageUrl = undefined;
+        if (selectedFile) {
+          const formData = new FormData();
+          formData.append("file", selectedFile);
+          const { data } = await UploadService.upload(formData);
+          imageUrl = data;
+        }
+        if (pathname === PROFILE_PAGE) {
+          await AuthService.updateUserInfo({
+            ...value,
+            imageUrl: imageUrl ?? defaultData.imageUrl,
+          });
+        } else if (pathname === NEW_USER) {
+          await AuthService.register({
+            ...value,
+            imageUrl: imageUrl ?? defaultData.imageUrl,
+          });
+        } else {
+          // update user info
+        }
+        enqueueSnackbar(t("notification.title.success"), {
           variant: "success",
         });
+        if (pathname !== PROFILE_PAGE) {
+          router.push(USER_PAGE)
+        }
       } catch (error) {
-        enqueueSnackbar(t("notification.title.updateProfileFail"), {
+        enqueueSnackbar(t("notification.title.fail"), {
           variant: "error",
         });
       }
@@ -152,7 +184,7 @@ export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): R
               )}
             </FormControl>
           </Grid>
-          {!isAdmin && (
+          {!isAdmin(getLocalStorage(ROLE) && pathname === PROFILE_PAGE) && (
             <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>{t("profile.form.class")}</InputLabel>
@@ -162,6 +194,7 @@ export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): R
                   value={values.classroom}
                   onChange={handleChange}
                   variant="outlined"
+                  disabled={pathname === PROFILE_PAGE}
                   error={!!errors.classroom && touched.classroom}
                 >
                   {classroomOptions.map((option, index) => (
@@ -192,7 +225,7 @@ export function AccountDetailsForm({ selectedFile }: AccountDetailsFormProps): R
               >
                 {genders.map((option, index) => (
                   <MenuItem key={index.toString()} value={option.value}>
-                    {option.label}
+                    {t(option.label)}
                   </MenuItem>
                 ))}
               </Select>

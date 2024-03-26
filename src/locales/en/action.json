@@ -3,6 +3,8 @@
     "save": "Save",
     "send": "Send",
     "create": "Create",
-    "logout": "Logout"
+    "logout": "Logout",
+    "edit": "Edit",
+    "delete": "Delete"
   }
 }

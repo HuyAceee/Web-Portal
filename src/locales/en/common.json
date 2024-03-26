@@ -1,6 +1,6 @@
 {
   "title": {
-    "dasboard": "Dasboard",
+    "dashboard": "Dashboard",
     "blog": "Blog",
     "changePassword": "Change Password",
     "login": "Login",
@@ -9,7 +9,9 @@
     "resetPassword": "Reset Password",
     "user": "User",
     "contactAdmin": "Contact Admin",
-    "notification": "Notification"
+    "notification": "Notification",
+    "addUser": "Add User",
+    "updateUser": "Update User"
   },
   "path": {
     "title": {

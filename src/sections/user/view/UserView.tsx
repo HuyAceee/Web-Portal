@@ -1,41 +1,50 @@
 import { useContext, useEffect, useState } from "react";
 
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
+import Container from "@mui/material/Container";
 import Stack from "@mui/material/Stack";
 import Table from "@mui/material/Table";
-import Button from "@mui/material/Button";
-import Container from "@mui/material/Container";
 import TableBody from "@mui/material/TableBody";
-import Typography from "@mui/material/Typography";
 import TableContainer from "@mui/material/TableContainer";
 import TablePagination from "@mui/material/TablePagination";
+import Typography from "@mui/material/Typography";
 
 import Iconify from "components/Iconify";
 import Scrollbar from "components/Scrollbar";
 
-import TableNoData from "../TableNoData";
-import UserTableRow from "../UserTableRow";
-import UserTableHead from "../UserTableHead";
-import TableEmptyRows from "../TableEmptyRows";
-import UserTableToolbar from "../UserTableToolbar";
-import { emptyRows, applyFilter, getComparator } from "../utils";
-import { UserService } from "services/user";
-import type { UserInformationModel } from "models/view/user";
+import { NEW_USER } from "constant/router";
 import { LoadingContext } from "contexts/LoadingContext";
+import type { HeaderLabelModel } from "models/common";
+import type { UserInformationModel } from "models/view/user";
+import { useTranslation } from "react-i18next";
+import { RouterLink } from "routes/components";
+import { UserService } from "services/user";
+import TableEmptyRows from "../TableEmptyRows";
+import TableNoData from "../TableNoData";
+import UserTableHead from "../UserTableHead";
+import UserTableRow from "../UserTableRow";
+import { emptyRows } from "../utils";
 
 // ----------------------------------------------------------------------
 
+const HeaderLabel: HeaderLabelModel[] = [
+  { id: "name", label: "user.table.header.name" },
+  { id: "email", label: "user.table.header.email" },
+  { id: "birthDate", label: "user.table.header.birthday" },
+  { id: "isFemale", label: "user.table.header.gender" },
+  { id: "phoneNumber", label: "user.table.header.phoneNumber" },
+  { id: "" },
+];
+
 export default function UserPage() {
-  const { openLoading, closeLoading } = useContext(LoadingContext);
+  const { t } = useTranslation();
+  const { openLoading, closeLoading, loading } = useContext(LoadingContext);
   const [page, setPage] = useState(0);
 
-  const [order, setOrder] = useState("asc");
-
-  const [selected, setSelected] = useState<any[]>([]);
+  const [order, setOrder] = useState<"asc" | "desc">("asc");
 
   const [orderBy, setOrderBy] = useState("name");
-
-  const [filterName, setFilterName] = useState("");
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -49,33 +58,6 @@ export default function UserPage() {
     }
   };
 
-  const handleSelectAllClick = (event: any) => {
-    if (event?.target?.checked) {
-      const newSelecteds = users.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (_event: any, name: string) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected: any[] = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1)
-      );
-    }
-    setSelected(newSelected);
-  };
-
   const handleChangePage = (_event: any, newPage: number) => {
     setPage(newPage);
   };
@@ -85,26 +67,11 @@ export default function UserPage() {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const handleFilterByName = (event: any) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
-  const dataFiltered: UserInformationModel[] = applyFilter({
-    inputData: users,
-    comparator: getComparator(order, orderBy),
-    filterName,
-  });
-
-  const notFound = !dataFiltered.length && !!filterName;
-
   const getUsers = async () => {
     try {
       openLoading();
       const { data } = await UserService.getList();
       setUsers(data);
-    } catch (error) {
-      console.log(error);
     } finally {
       closeLoading();
     }
@@ -122,61 +89,41 @@ export default function UserPage() {
         justifyContent="space-between"
         mb={5}
       >
-        <Typography variant="h4">Users</Typography>
+        <Typography variant="h4">{t("user.title")}</Typography>
 
-        <Button
-          variant="contained"
-          color="inherit"
-          startIcon={<Iconify icon="eva:plus-fill" />}
-        >
-          New User
-        </Button>
+        <RouterLink href={NEW_USER}>
+          <Button
+            variant="contained"
+            color="inherit"
+            startIcon={<Iconify icon="eva:plus-fill" />}
+          >
+            {t("user.button.newUser")}
+          </Button>
+        </RouterLink>
       </Stack>
 
       <Card>
-        <UserTableToolbar
-          numSelected={selected.length}
-          filterName={filterName}
-          onFilterName={handleFilterByName}
-        />
-
         <Scrollbar>
           <TableContainer sx={{ overflow: "unset" }}>
             <Table sx={{ minWidth: 800 }}>
               <UserTableHead
                 order={order}
                 orderBy={orderBy}
-                rowCount={users.length}
-                numSelected={selected.length}
                 onRequestSort={handleSort}
-                onSelectAllClick={handleSelectAllClick}
-                headLabel={[
-                  { id: "name", label: "Name" },
-                  { id: "email", label: "Email" },
-                  { id: "birthDate", label: "Birthday" },
-                  { id: "isFemale", label: "Gender", align: "center" },
-                  { id: "phoneNumber", label: "Phone number" },
-                  { id: "" },
-                ]}
+                headLabel={HeaderLabel}
               />
               <TableBody>
-                {dataFiltered
+                {users
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
-                    <UserTableRow
-                      key={index}
-                      data={row}
-                      selected={selected.indexOf(row.name) !== -1}
-                      handleClick={(event: any) => handleClick(event, row.name)}
-                    />
+                    <UserTableRow key={index} data={row} fetchData={getUsers} />
                   ))}
 
                 <TableEmptyRows
                   height={77}
                   emptyRows={emptyRows(page, rowsPerPage, users.length)}
                 />
-
-                {notFound && <TableNoData query={filterName} />}
+                {!users.length && !loading && <TableNoData />}
               </TableBody>
             </Table>
           </TableContainer>

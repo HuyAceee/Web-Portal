@@ -4,11 +4,13 @@ import { Fragment, ReactNode, createContext, useState } from "react";
 interface LoadingContextModel {
   openLoading: () => void;
   closeLoading: () => void;
+  loading: boolean
 }
 
 export const LoadingContext = createContext<LoadingContextModel>({
   openLoading: () => {},
   closeLoading: () => {},
+  loading: true
 });
 
 interface ILoadingProviderProps {
@@ -40,6 +42,7 @@ export function LoadingProvider({ children }: ILoadingProviderProps) {
       value={{
         openLoading,
         closeLoading,
+        loading: showLoading
       }}
     >
       <Fragment>

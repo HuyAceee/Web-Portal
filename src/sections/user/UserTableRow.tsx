@@ -1,33 +1,37 @@
-import { useState } from "react";
-import Stack from "@mui/material/Stack";
 import Avatar from "@mui/material/Avatar";
-import Popover from "@mui/material/Popover";
-import TableRow from "@mui/material/TableRow";
-import Checkbox from "@mui/material/Checkbox";
-import MenuItem from "@mui/material/MenuItem";
-import TableCell from "@mui/material/TableCell";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-
-import Label from "components/label/Label";
+import MenuItem from "@mui/material/MenuItem";
+import Popover from "@mui/material/Popover";
+import Stack from "@mui/material/Stack";
+import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
+import Typography from "@mui/material/Typography";
 import Iconify from "components/Iconify";
+import { UPDATE_USER } from "constant/router";
+import { DialogContext } from "contexts/DialogContext";
+import { LoadingContext } from "contexts/LoadingContext";
 import type { UserInformationModel } from "models/view/user";
-import { convertImageUrl } from "utils/common";
-import { fDate } from "utils/formatTime";
+import { useSnackbar } from "notistack";
+import { useContext, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useRouter } from "routes/hooks";
+import { UserService } from "services/user";
+import { convertImageUrl, convertObjectToQueryString } from "utils/common";
+import { formatDate_YYYY_MM_DD } from "utils/formatTime";
 
 // ----------------------------------------------------------------------
 
 interface UserTableRowProps {
   data: UserInformationModel;
-  selected: boolean;
-  handleClick: (event: any) => void;
+  fetchData: () => Promise<void>;
 }
 
-export default function UserTableRow({
-  data,
-  handleClick,
-  selected,
-}: UserTableRowProps) {
+export default function UserTableRow({ data, fetchData }: UserTableRowProps) {
+  const { t } = useTranslation();
+  const router = useRouter();
+  const { openLoading, closeLoading } = useContext(LoadingContext);
+  const { openDialog } = useContext(DialogContext);
+  const { enqueueSnackbar } = useSnackbar();
   const [open, setOpen] = useState(null);
 
   const handleOpenMenu = (event: any) => {
@@ -38,15 +42,51 @@ export default function UserTableRow({
     setOpen(null);
   };
 
+  const handleRedirectEditUser = () => {
+    handleCloseMenu();
+    router.push(
+      UPDATE_USER +
+        "?" +
+        convertObjectToQueryString({
+          email: data.email,
+        })
+    );
+  };
+
+  const handleDeleteUser = () => {
+    handleCloseMenu();
+    openDialog?.({
+      title: "notification.title.confirmDelete",
+      content: "notification.content.confirmDelete",
+      onConfirm: async () => {
+        try {
+          openLoading();
+          await UserService.delete(data.email);
+          enqueueSnackbar(t("notification.title.success"), {
+            variant: "success",
+          });
+          await fetchData();
+        } catch (error) {
+          enqueueSnackbar(t("notification.title.fail"), {
+            variant: "error",
+          });
+        } finally {
+          closeLoading();
+        }
+      },
+    });
+  };
+
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox disableRipple checked={selected} onChange={handleClick} />
-        </TableCell>
-
-        <TableCell component="th" scope="row" padding="none">
-          <Stack direction="row" alignItems="center" spacing={2}>
+      <TableRow hover tabIndex={-1} role="checkbox">
+        <TableCell component="th" scope="row" padding="none" align="center">
+          <Stack
+            direction="row"
+            alignItems="center"
+            spacing={2}
+            justifyContent="center"
+          >
             <Avatar alt={data.name} src={convertImageUrl(data.imageUrl)} />
             <Typography variant="subtitle2" noWrap>
               {data.name}
@@ -54,17 +94,21 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{data.email}</TableCell>
-
-        <TableCell>{fDate(data.birthDate, "YYYY-MM-DD")}</TableCell>
+        <TableCell align="center">{data.email}</TableCell>
 
         <TableCell align="center">
-          {data.isFemale ? "Female" : "Male"}
+          {formatDate_YYYY_MM_DD(data.birthDate)}
         </TableCell>
 
-        <TableCell>{data.phoneNumber}</TableCell>
+        <TableCell align="center">
+          {data.isFemale
+            ? t("profile.options.gender.female")
+            : t("profile.options.gender.male")}
+        </TableCell>
 
-        <TableCell align="right">
+        <TableCell align="center">{data.phoneNumber}</TableCell>
+
+        <TableCell align="right" width={20}>
           <IconButton onClick={handleOpenMenu}>
             <Iconify icon="eva:more-vertical-fill" />
           </IconButton>
@@ -83,12 +127,12 @@ export default function UserTableRow({
       >
         <MenuItem onClick={handleCloseMenu}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          Edit
+          {t("action.edit")}
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: "error.main" }}>
+        <MenuItem onClick={handleDeleteUser} sx={{ color: "error.main" }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
-          Delete
+          {t("action.delete")}
         </MenuItem>
       </Popover>
     </>

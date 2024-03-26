@@ -14,6 +14,7 @@ import { handleLocalStorage } from 'utils/localStorage';
 import { ACCESS_TOKEN } from 'constant/key';
 import { AuthContext } from 'contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { convertImageUrl } from 'utils/common';
 
 // ----------------------------------------------------------------------
 
@@ -48,6 +49,7 @@ export default function AccountPopover() {
   };
 
   const handleLogout = () => {
+    handleClose()
     removeLocalStorage(ACCESS_TOKEN)
     router.push(LOGIN_PAGE)
   }
@@ -67,7 +69,7 @@ export default function AccountPopover() {
         }}
       >
         <Avatar
-          src={account.imageUrl}
+          src={convertImageUrl(account.imageUrl)}
           alt={account.name}
           sx={{
             width: 36,

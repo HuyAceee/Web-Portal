@@ -25,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { NotificationService } from "services/notification";
 import { UploadService } from "services/upload";
 import { convertObjectWithDefaults } from "utils/common";
+import { formatDate_YYYY_MM_DD } from "utils/formatTime";
 import * as Yup from "yup";
 
 interface NotificationFormProps {
@@ -50,8 +51,8 @@ export function NotificationForm({
     initialValues: convertObjectWithDefaults<NotificationModel>({
       title: "",
       description: "",
-      startDate: dayjs().format("YYYY-MM-DD"),
-      endDate: dayjs().format("YYYY-MM-DD"),
+      startDate: formatDate_YYYY_MM_DD(),
+      endDate: formatDate_YYYY_MM_DD(),
     } as NotificationModel),
     validationSchema,
     onSubmit: async (value) => {

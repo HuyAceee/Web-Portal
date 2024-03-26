@@ -3,9 +3,11 @@ import {
   BLOG_PAGE,
   CHANGE_PASSWORD_PAGE,
   CONTACT_ADMIN,
+  NEW_USER,
   NOTIFICATION,
   PRODUCTS_PAGE,
   PROFILE_PAGE,
+  UPDATE_USER,
   USER_PAGE,
 } from "./router";
 import SvgColor from "components/SvgColor";
@@ -25,6 +27,7 @@ const ProfilePage = lazy(() => import("pages/Profile"));
 const ChangePasswordPage = lazy(() => import("pages/ChangePassword"));
 const ContactAdminPage = lazy(() => import("pages/user/ContactAdmin"));
 const NotificationPage = lazy(() => import("pages/admin/Notification"));
+const UserFormPage = lazy(() => import("pages/admin/UserForm"));
 
 interface RouterItemModel {
   index?: boolean;
@@ -43,9 +46,23 @@ export const routerUser: RouterItemModel[] = [
     title: "dashboard",
     icon: icon("ic_analytics"),
   },
-  { path: PROFILE_PAGE, element: ProfilePage, title: "profile", icon: icon("ic_profile"), },
-  { path: CHANGE_PASSWORD_PAGE, element: ChangePasswordPage, isHiddenMenu: true },
-  { path: CONTACT_ADMIN, element: ContactAdminPage, title: "contact", icon: icon("ic_contact-admin"), },
+  {
+    path: PROFILE_PAGE,
+    element: ProfilePage,
+    title: "profile",
+    icon: icon("ic_profile"),
+  },
+  {
+    path: CHANGE_PASSWORD_PAGE,
+    element: ChangePasswordPage,
+    isHiddenMenu: true,
+  },
+  {
+    path: CONTACT_ADMIN,
+    element: ContactAdminPage,
+    title: "contact",
+    icon: icon("ic_contact-admin"),
+  },
 ];
 
 export const routerAdmin: RouterItemModel[] = [
@@ -56,7 +73,12 @@ export const routerAdmin: RouterItemModel[] = [
     title: "dashboard",
     icon: icon("ic_analytics"),
   },
-  { path: PROFILE_PAGE, element: ProfilePage, title: "profile", icon: icon("ic_profile"), },
+  {
+    path: PROFILE_PAGE,
+    element: ProfilePage,
+    title: "profile",
+    icon: icon("ic_profile"),
+  },
   { path: USER_PAGE, element: UserPage, title: "user", icon: icon("ic_user") },
   {
     path: PRODUCTS_PAGE,
@@ -64,8 +86,34 @@ export const routerAdmin: RouterItemModel[] = [
     title: "product",
     icon: icon("ic_cart"),
   },
-  { path: CHANGE_PASSWORD_PAGE, element: ChangePasswordPage, isHiddenMenu: true },
+  {
+    path: CHANGE_PASSWORD_PAGE,
+    element: ChangePasswordPage,
+    isHiddenMenu: true,
+  },
   { path: BLOG_PAGE, element: BlogPage, title: "blog", icon: icon("ic_blog") },
-  { path: NOTIFICATION, element: NotificationPage, title: "notification", icon: icon("ic_blog") },
-  { path: CONTACT_ADMIN, element: ContactAdminPage, title: "contact", icon: icon("ic_contact-admin"), },
+  {
+    path: NOTIFICATION,
+    element: NotificationPage,
+    title: "notification",
+    isHiddenMenu: true,
+  },
+  {
+    path: CONTACT_ADMIN,
+    element: ContactAdminPage,
+    title: "contact",
+    icon: icon("ic_contact-admin"),
+  },
+  {
+    path: NEW_USER,
+    element: UserFormPage,
+    title: "contact",
+    isHiddenMenu: true,
+  },
+  {
+    path: UPDATE_USER,
+    element: UserFormPage,
+    title: "contact",
+    isHiddenMenu: true,
+  },
 ];

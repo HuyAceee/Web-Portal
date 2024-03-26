@@ -40,7 +40,7 @@ export default function BlogView() {
         justifyContent="space-between"
         mb={5}
       >
-        <Typography variant="h4">{t("blog.info.title")}</Typography>
+        <Typography variant="h4">{t("notification.title.default")}</Typography>
 
         <RouterLink href={NOTIFICATION}>
           <Button
@@ -48,7 +48,7 @@ export default function BlogView() {
             color="inherit"
             startIcon={<Iconify icon="eva:plus-fill" />}
           >
-            {t("blog.button.newPost")}
+            {t("notification.button.newNotification")}
           </Button>
         </RouterLink>
       </Stack>
