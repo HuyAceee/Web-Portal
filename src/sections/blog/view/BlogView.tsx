@@ -6,7 +6,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 
 import Iconify from "components/Iconify";
 
-import { NOTIFICATION } from "constant/router";
+import { NEW_NOTIFICATION } from "constant/router";
 import type { NotificationModel } from "models/view/notification";
 import { useEffect, useState } from "react";
 import { RouterLink } from "routes/components";
@@ -42,7 +42,7 @@ export default function BlogView() {
       >
         <Typography variant="h4">{t("notification.title.default")}</Typography>
 
-        <RouterLink href={NOTIFICATION}>
+        <RouterLink href={NEW_NOTIFICATION}>
           <Button
             variant="contained"
             color="inherit"

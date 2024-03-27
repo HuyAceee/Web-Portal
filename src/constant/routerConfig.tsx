@@ -1,12 +1,15 @@
 import { LazyExoticComponent, lazy } from "react";
 import {
-  BLOG_PAGE,
   CHANGE_PASSWORD_PAGE,
   CONTACT_ADMIN,
+  DASHBOARD_PAGE,
+  MAIN_PAGE,
+  NEW_NOTIFICATION,
   NEW_USER,
-  NOTIFICATION,
+  NOTIFICATION_PAGE,
   PRODUCTS_PAGE,
   PROFILE_PAGE,
+  RESET_PASSWORD,
   UPDATE_USER,
   USER_PAGE,
 } from "./router";
@@ -19,14 +22,16 @@ export const icon = (name: string) => (
   />
 );
 
+export const ROUTER_NO_AUTH = [MAIN_PAGE, RESET_PASSWORD];
+
 const IndexPage = lazy(() => import("pages/App"));
 const UserPage = lazy(() => import("pages/User"));
-const BlogPage = lazy(() => import("pages/Blog"));
+const NotificationPage = lazy(() => import("pages/Blog"));
 const ProductsPage = lazy(() => import("pages/Products"));
 const ProfilePage = lazy(() => import("pages/Profile"));
 const ChangePasswordPage = lazy(() => import("pages/ChangePassword"));
 const ContactAdminPage = lazy(() => import("pages/user/ContactAdmin"));
-const NotificationPage = lazy(() => import("pages/admin/Notification"));
+const NewNotificationPage = lazy(() => import("pages/admin/NotificationForm"));
 const UserFormPage = lazy(() => import("pages/admin/UserForm"));
 
 interface RouterItemModel {
@@ -40,7 +45,7 @@ interface RouterItemModel {
 
 export const routerUser: RouterItemModel[] = [
   {
-    path: "/",
+    path: DASHBOARD_PAGE,
     element: IndexPage,
     index: true,
     title: "dashboard",
@@ -58,6 +63,12 @@ export const routerUser: RouterItemModel[] = [
     isHiddenMenu: true,
   },
   {
+    path: NOTIFICATION_PAGE,
+    element: NotificationPage,
+    title: "notification",
+    icon: icon("ic_blog"),
+  },
+  {
     path: CONTACT_ADMIN,
     element: ContactAdminPage,
     title: "contact",
@@ -67,7 +78,7 @@ export const routerUser: RouterItemModel[] = [
 
 export const routerAdmin: RouterItemModel[] = [
   {
-    path: "/",
+    path: DASHBOARD_PAGE,
     element: IndexPage,
     index: true,
     title: "dashboard",
@@ -91,10 +102,15 @@ export const routerAdmin: RouterItemModel[] = [
     element: ChangePasswordPage,
     isHiddenMenu: true,
   },
-  { path: BLOG_PAGE, element: BlogPage, title: "blog", icon: icon("ic_blog") },
   {
-    path: NOTIFICATION,
+    path: NOTIFICATION_PAGE,
     element: NotificationPage,
+    title: "notification",
+    icon: icon("ic_blog"),
+  },
+  {
+    path: NEW_NOTIFICATION,
+    element: NewNotificationPage,
     title: "notification",
     isHiddenMenu: true,
   },

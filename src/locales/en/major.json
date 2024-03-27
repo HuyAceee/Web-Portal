@@ -1,0 +1,16 @@
+{
+  "major": {
+    "english": {
+      "title": "English Major",
+      "description": "Specializes in training students to be proficient in English in all four skills of listening, speaking, reading, and writing; Have knowledge about the culture and society of countries that use English."
+    },
+    "rusia": {
+      "title": "Rusia Major",
+      "description": "Specializes in training students to be proficient in Rusia in all four skills of listening, speaking, reading, and writing; Have knowledge about the culture and society of countries that use Rusia."
+    },
+    "vietnamese": {
+      "title": "Vietnamese Major",
+      "description": "Specializes in training students to be proficient in Vietnamese in all four skills of listening, speaking, reading, and writing; Have knowledge about the culture and society of countries that use Vietnamese."
+    }
+  }
+}

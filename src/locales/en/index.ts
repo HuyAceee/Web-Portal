@@ -7,6 +7,7 @@ import blog from "./blog.json";
 import auth from "./auth.json";
 import common from "./common.json";
 import user from "./user.json";
+import major from "./major.json";
 
 export const viLocales = {
   ...profile,
@@ -17,5 +18,6 @@ export const viLocales = {
   ...blog,
   ...auth,
   ...common,
-  ...user
+  ...user,
+  ...major
 };

@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 
 import Iconify from "components/Iconify";
 import Scrollbar from "components/Scrollbar";
-import { BLOG_PAGE } from "constant/router";
+import { NOTIFICATION_PAGE } from "constant/router";
 import dayjs from "dayjs";
 import type { NotificationModel } from "models/view/notification";
 import { useNavigate } from "react-router-dom";
@@ -122,7 +122,7 @@ function NotificationItem({ notification, onClose }: NotificationItemProps) {
         },
       }}
       onClick={() => {
-        navigate(BLOG_PAGE);
+        navigate(NOTIFICATION_PAGE);
         onClose();
       }}
     >

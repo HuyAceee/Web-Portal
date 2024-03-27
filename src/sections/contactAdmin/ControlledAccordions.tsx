@@ -26,6 +26,7 @@ export default function ControlledAccordions({
           fetchData={fetchData}
           expanded={expanded === "panel" + index}
           onChange={handleChange("panel" + index)}
+          setExpanded={setExpanded}
           data={item}
         />
       ))}

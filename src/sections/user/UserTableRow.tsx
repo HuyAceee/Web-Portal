@@ -125,7 +125,7 @@ export default function UserTableRow({ data, fetchData }: UserTableRowProps) {
           sx: { width: 140 },
         }}
       >
-        <MenuItem onClick={handleCloseMenu}>
+        <MenuItem onClick={handleRedirectEditUser}>
           <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
           {t("action.edit")}
         </MenuItem>

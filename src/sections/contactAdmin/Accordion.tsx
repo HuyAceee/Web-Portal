@@ -29,13 +29,15 @@ interface AccordionComponentProps {
     | ((event: React.SyntheticEvent<Element, Event>, expanded: boolean) => void)
     | undefined;
   fetchData: () => Promise<void>;
+  setExpanded: React.Dispatch<React.SetStateAction<string | false>>
 }
 
 const AccordionComponent = ({
   data,
   expanded,
   onChange,
-  fetchData
+  fetchData,
+  setExpanded
 }: AccordionComponentProps) => {
   const { t } = useTranslation();
   const { userInfo } = useContext(AuthContext);
@@ -52,6 +54,7 @@ const AccordionComponent = ({
       try {
         openLoading();
         await QuestionService.answer(value);
+        setExpanded(false)
         await fetchData()
         enqueueSnackbar(t("notification.title.success"), {
           variant: "success",

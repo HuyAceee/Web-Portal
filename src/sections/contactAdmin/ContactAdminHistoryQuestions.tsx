@@ -7,22 +7,14 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { QuestionService } from "services/question";
 
-export default function ContactAdminHistoryQuestions(): JSX.Element {
-  const { t } = useTranslation();
-  const [questions, setQuestions] = useState<QuestionModel[]>([]);
-  const getQuestionList = async () => {
-    try {
-      const { data } = await QuestionService.getList();
-      if (!data) return;
-      setQuestions(data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+interface ContactAdminHistoryQuestionsProps {
+  questions: QuestionModel[]
+  getQuestionList: () => Promise<void>
+}
 
-  useEffect(() => {
-    getQuestionList();
-  }, []);
+export default function ContactAdminHistoryQuestions({ questions, getQuestionList }: ContactAdminHistoryQuestionsProps): JSX.Element {
+  const { t } = useTranslation();
+
   return (
     <Card>
       <CardHeader

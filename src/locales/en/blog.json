@@ -1,7 +1,7 @@
 {
   "blog": {
     "info": {
-      "title": "Blog",
+      "title": "Notification",
       "subheader": "The information can be edited",
       "default": "Information"
     },
@@ -12,7 +12,7 @@
       "endDate": "End date"
     },
     "button": {
-        "newPost": "New post"
+      "newPost": "New notification"
     }
   }
 }

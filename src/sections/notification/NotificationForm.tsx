@@ -15,6 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import CustomTextarea from "components/CustomTextarea";
+import { NOTIFICATION_PAGE } from "constant/router";
 import { fieldRequired } from "constant/validation";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -22,6 +23,7 @@ import type { NotificationModel } from "models/view/notification";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "routes/hooks";
 import { NotificationService } from "services/notification";
 import { UploadService } from "services/upload";
 import { convertObjectWithDefaults } from "utils/common";
@@ -36,6 +38,7 @@ export function NotificationForm({
   selectedFile,
 }: NotificationFormProps): React.JSX.Element {
   const { t } = useTranslation();
+  const router = useRouter()
   const { enqueueSnackbar } = useSnackbar();
 
   const validationSchema = Yup.object({
@@ -70,6 +73,7 @@ export function NotificationForm({
         enqueueSnackbar(t("notification.title.createSuccess"), {
           variant: "success",
         });
+        router.push(NOTIFICATION_PAGE)
       } catch (error) {
         enqueueSnackbar(t("notification.title.createFail"), {
           variant: "error",

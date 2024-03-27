@@ -79,8 +79,6 @@ export function NotificationInfo({
               height: "auto",
               width: "100%",
               minHeight: '200px',
-              borderRadius: "6px",
-              border: 'none',
               paddingLeft: "0 !important",
               paddingRight: "0 !important",
             }}

@@ -47,7 +47,7 @@ interface AccountDetailsFormProps {
 }
 
 interface UserFormQueriesModel {
-  email?: string
+  email?: string;
 }
 
 const genders = [
@@ -64,9 +64,15 @@ export function AccountDetailsForm({
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const { getLocalStorage } = handleLocalStorage();
-  const router = useRouter()
+  const router = useRouter();
   const [classroom, setClassroom] = React.useState<ClassroomModel[]>([]);
-  const allParams: UserFormQueriesModel = Object.fromEntries(searchParams as unknown as Iterable<readonly any[]>);
+  const allParams: UserFormQueriesModel = Object.fromEntries(
+    searchParams as unknown as Iterable<readonly any[]>
+  );
+
+  const isAdminAccount = React.useMemo(() => {
+    return isAdmin(getLocalStorage(ROLE))
+  }, [getLocalStorage(ROLE)])
   const getClassroom = async () => {
     try {
       const data = await ClassroomService.getList();
@@ -88,6 +94,7 @@ export function AccountDetailsForm({
     phoneNumber: Yup.string()
       .required(t(fieldRequired))
       .matches(phoneNumberRegex, t(fieldPhoneNumber)),
+    ...(!isAdminAccount ? { classroom: Yup.string().required() } : {}),
   });
 
   const formik = useFormik<UserInformationModel>({
@@ -124,7 +131,7 @@ export function AccountDetailsForm({
           variant: "success",
         });
         if (pathname !== PROFILE_PAGE) {
-          router.push(USER_PAGE)
+          router.push(USER_PAGE);
         }
       } catch (error) {
         enqueueSnackbar(t("notification.title.fail"), {
@@ -140,6 +147,11 @@ export function AccountDetailsForm({
   React.useEffect(() => {
     getClassroom();
   }, []);
+
+  const showClassroomField = React.useMemo(() => {
+    if (pathname === PROFILE_PAGE && isAdminAccount) return false
+    return true
+  }, [pathname, isAdminAccount])
 
   return (
     <Card>
@@ -184,7 +196,7 @@ export function AccountDetailsForm({
               )}
             </FormControl>
           </Grid>
-          {!isAdmin(getLocalStorage(ROLE) && pathname === PROFILE_PAGE) && (
+          {showClassroomField && (
             <Grid md={6} xs={12}>
               <FormControl fullWidth required>
                 <InputLabel>{t("profile.form.class")}</InputLabel>
@@ -236,7 +248,7 @@ export function AccountDetailsForm({
               )}
             </FormControl>
           </Grid>
-          <Grid md={6} xs={12}>
+          <Grid md={6} xs={12} pt={0.5}>
             <FormControl fullWidth required>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>

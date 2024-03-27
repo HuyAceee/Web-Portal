@@ -23,7 +23,7 @@ export default function UserFormView(): React.JSX.Element {
   return (
     <Stack spacing={3}>
       <Grid container justifyContent="space-between" spacing={3}>
-        <Typography variant="h4">{t("user.button.newUser")}</Typography>
+        <Typography variant="h4">{t("user.form.title")}</Typography>
       </Grid>
       <Grid container spacing={3}>
         <Grid lg={4} md={6} xs={12}>

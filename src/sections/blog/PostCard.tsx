@@ -167,7 +167,7 @@ export default function PostCard({ post, index }: PostCardProps) {
             >
               {renderShape}
 
-              {renderAvatar}
+              {/* {renderAvatar} */}
 
               {renderCover}
             </Box>

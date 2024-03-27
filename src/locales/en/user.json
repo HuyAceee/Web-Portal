@@ -13,6 +13,9 @@
     "button": {
       "newUser": "New User"
     },
-    "notFound": "Not found"
+    "notFound": "Not found",
+    "form": {
+      "title": "User"
+    }
   }
 }

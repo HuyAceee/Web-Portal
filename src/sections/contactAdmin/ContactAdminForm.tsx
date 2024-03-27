@@ -21,7 +21,11 @@ import { useTranslation } from "react-i18next";
 import { QuestionService } from "services/question";
 import * as Yup from "yup";
 
-export default function ContactAdminForm(): JSX.Element {
+interface ContactAdminFormProps {
+  getQuestionList: () => Promise<void>
+}
+
+export default function ContactAdminForm({ getQuestionList }: ContactAdminFormProps): JSX.Element {
   const { t } = useTranslation();
   const { openLoading, closeLoading } = useContext(LoadingContext);
   const { enqueueSnackbar } = useSnackbar();
@@ -43,6 +47,7 @@ export default function ContactAdminForm(): JSX.Element {
           variant: "success",
         });
         resetForm();
+        await getQuestionList()
       } catch (error) {
         enqueueSnackbar(t("notification.title.fail"), {
           variant: "error",

@@ -1,24 +1,13 @@
-import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
+import { ReactNode, useState } from "react";
+import Header from "./Header";
 import Nav from "./Nav";
 import Main from "./main";
-import Header from "./Header";
-import { useNavigate } from "react-router-dom";
-import { LOGIN_PAGE } from "constant/router";
-import { handleLocalStorage } from "utils/localStorage";
-import { ACCESS_TOKEN } from "constant/key";
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout({ children }: any) {
-  const { getLocalStorage } = handleLocalStorage();
-  const accessToken = getLocalStorage(ACCESS_TOKEN);
+export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [openNav, setOpenNav] = useState(false);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    // if (!accessToken) navigate(LOGIN_PAGE);
-  }, []);
 
   return (
     <>
