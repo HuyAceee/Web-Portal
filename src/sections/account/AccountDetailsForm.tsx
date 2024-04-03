@@ -38,6 +38,7 @@ import { AuthService } from "services/auth";
 import { ClassroomService } from "services/classroom";
 import { UploadService } from "services/upload";
 import { convertObjectWithDefaults, isAdmin } from "utils/common";
+import { convertDate } from "utils/formatTime";
 import { handleLocalStorage } from "utils/localStorage";
 import * as Yup from "yup";
 
@@ -71,8 +72,8 @@ export function AccountDetailsForm({
   );
 
   const isAdminAccount = React.useMemo(() => {
-    return isAdmin(getLocalStorage(ROLE))
-  }, [getLocalStorage(ROLE)])
+    return isAdmin(getLocalStorage(ROLE));
+  }, [getLocalStorage(ROLE)]);
   const getClassroom = async () => {
     try {
       const data = await ClassroomService.getList();
@@ -149,9 +150,11 @@ export function AccountDetailsForm({
   }, []);
 
   const showClassroomField = React.useMemo(() => {
-    if (pathname === PROFILE_PAGE && isAdminAccount) return false
-    return true
-  }, [pathname, isAdminAccount])
+    if (pathname === PROFILE_PAGE && isAdminAccount) return false;
+    return true;
+  }, [pathname, isAdminAccount]);
+
+  console.log(errors)
 
   return (
     <Card>
@@ -255,7 +258,11 @@ export function AccountDetailsForm({
                   <DatePicker
                     label="Birthday"
                     name="birthDate"
+                    sx={{
+                      width: '100%'
+                    }}
                     selectedSections="all"
+                    format="DD/MM/YYYY"
                     value={dayjs(values.birthDate)}
                     onChange={(value: any) => {
                       setFieldValue("birthDate", Date.parse(value));

@@ -41,24 +41,20 @@ export default function Router() {
         };
       }),
     },
-    // {
-    //   element: (
-    //     <MainLayout>
-    //       <Suspense>
-    //         <Outlet />
-    //       </Suspense>
-    //     </MainLayout>
-    //   ),
-    //   children: [
-    //     {
-    //       path: MAIN_PAGE,
-    //       element: <MainPage />,
-    //     },
-    //   ],
-    // },
     {
-      path: MAIN_PAGE,
-      element: <MainPage />,
+      element: (
+        <MainLayout>
+          <Suspense>
+            <Outlet />
+          </Suspense>
+        </MainLayout>
+      ),
+      children: [
+        {
+          path: MAIN_PAGE,
+          element: <MainPage />,
+        },
+      ],
     },
     {
       path: LOGIN_PAGE,

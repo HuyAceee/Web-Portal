@@ -29,10 +29,9 @@ export function AuthProvider({ children }: IAuthProviderProps) {
   const { t } = useTranslation();
   const { removeLocalStorage, getLocalStorage, setLocalStorage } =
     handleLocalStorage();
-  const accessToken = getLocalStorage(ACCESS_TOKEN);
-  const router = useRouter();
-  const pathname = usePathname();
-  const { enqueueSnackbar } = useSnackbar();
+    const router = useRouter();
+    const pathname = usePathname();
+    const { enqueueSnackbar } = useSnackbar();
   const [userInfo, setUserInfo] = useState({} as UserInformationModel);
 
   const handleError = () => {
@@ -43,6 +42,7 @@ export function AuthProvider({ children }: IAuthProviderProps) {
     router.push(LOGIN_PAGE);
   };
   const handleGetUserInfor = async () => {
+    const accessToken = getLocalStorage(ACCESS_TOKEN);
     try {
       if (!accessToken) {
         if (ROUTER_NO_AUTH.includes(pathname)) return;

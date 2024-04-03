@@ -16,8 +16,6 @@ export default function Header() {
   const theme = useTheme();
   const { userInfo } = useContext(AuthContext);
 
-  const lgUp = useResponsive("up", "lg");
-
   const renderContent = (
     <Stack direction="row" alignItems="center" spacing={1}>
       <Avatar src={convertImageUrl(userInfo.imageUrl)} />
@@ -37,10 +35,6 @@ export default function Header() {
           transition: theme.transitions.create(["height"], {
             duration: theme.transitions.duration.shorter,
           }),
-          ...(lgUp && {
-            width: `calc(100% - ${NAV.WIDTH + 1}px)`,
-            height: HEADER.H_DESKTOP,
-          }),
         } as any
       }
     >
@@ -48,6 +42,8 @@ export default function Header() {
         sx={{
           height: 1,
           px: { lg: 5 },
+          backdropFilter: "blur(20px)",
+          justifyContent: 'flex-end'
         }}
       >
         {renderContent}
