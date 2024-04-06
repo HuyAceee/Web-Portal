@@ -9,8 +9,7 @@ import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
 import { styled } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
-import { AuthContext } from "contexts/AuthContext";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { convertImageUrl } from "utils/common";
 import type { UserInformationModel } from "models/view/user";
 
@@ -68,15 +67,15 @@ export function AccountInfo({ selectedFile, setSelectedFile, defaultData = {} as
       <CardContent>
         <Stack spacing={2} sx={{ alignItems: "center" }}>
           <div>
-            <Avatar src={preview ?? convertImageUrl(defaultData.imageUrl)} sx={{ height: "100px", width: "100px" }} />
+            <Avatar src={preview ?? convertImageUrl(defaultData?.imageUrl)} sx={{ height: "100px", width: "100px" }} />
           </div>
           <Stack spacing={1} sx={{ textAlign: "center" }}>
-            <Typography variant="h5">{defaultData.name}</Typography>
+            <Typography variant="h5">{defaultData?.name}</Typography>
             <Typography color="text.secondary" variant="body2">
-              {defaultData.email}
+              {defaultData?.email}
             </Typography>
             <Typography color="text.secondary" variant="body2">
-              {defaultData.phoneNumber}
+              {defaultData?.phoneNumber}
             </Typography>
           </Stack>
         </Stack>

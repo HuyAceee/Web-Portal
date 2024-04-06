@@ -10,16 +10,23 @@ import { usePathname } from "routes/hooks";
 import { AccountDetailsForm } from "sections/account/AccountDetailsForm";
 import { AccountInfo } from "sections/account/AccountInfo";
 
-export default function UserFormView(): React.JSX.Element {
+interface UserFormViewProps {
+  userDetail?: UserInformationModel
+}
+
+export default function UserFormView({ userDetail = {} as UserInformationModel }: UserFormViewProps): React.JSX.Element {
+  
   const { userInfo } = useContext(AuthContext);
   const { t } = useTranslation();
   const pathname = usePathname()
-  const defaultData = useMemo(() => {
+  const defaultData: UserInformationModel = useMemo(() => {
     if (pathname === PROFILE_PAGE) return userInfo
     if (pathname === NEW_USER) return {} as UserInformationModel
-    return {} as UserInformationModel
-  }, [pathname])
+    return userDetail
+  }, [pathname, userDetail])
+
   const [selectedFile, setSelectedFile] = useState();
+
   return (
     <Stack spacing={3}>
       <Grid container justifyContent="space-between" spacing={3}>

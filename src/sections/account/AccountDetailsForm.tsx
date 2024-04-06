@@ -32,23 +32,18 @@ import type { UserInformationModel } from "models/view/user";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
 import { usePathname, useRouter } from "routes/hooks";
 import { AuthService } from "services/auth";
 import { ClassroomService } from "services/classroom";
 import { UploadService } from "services/upload";
+import { UserService } from "services/user";
 import { convertObjectWithDefaults, isAdmin } from "utils/common";
-import { convertDate } from "utils/formatTime";
 import { handleLocalStorage } from "utils/localStorage";
 import * as Yup from "yup";
 
 interface AccountDetailsFormProps {
   selectedFile: any;
   defaultData?: UserInformationModel;
-}
-
-interface UserFormQueriesModel {
-  email?: string;
 }
 
 const genders = [
@@ -60,16 +55,13 @@ export function AccountDetailsForm({
   selectedFile,
   defaultData = {} as UserInformationModel,
 }: AccountDetailsFormProps): React.JSX.Element {
-  const [searchParams] = useSearchParams();
+  console.log(defaultData)
   const pathname = usePathname();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const { getLocalStorage } = handleLocalStorage();
   const router = useRouter();
   const [classroom, setClassroom] = React.useState<ClassroomModel[]>([]);
-  const allParams: UserFormQueriesModel = Object.fromEntries(
-    searchParams as unknown as Iterable<readonly any[]>
-  );
 
   const isAdminAccount = React.useMemo(() => {
     return isAdmin(getLocalStorage(ROLE));
@@ -103,7 +95,7 @@ export function AccountDetailsForm({
     enableReinitialize: true,
     initialValues: convertObjectWithDefaults<UserInformationModel>({
       ...defaultData,
-      isFemale: defaultData.isFemale ? 1 : 0,
+      isFemale: defaultData?.isFemale ? 1 : 0,
     }),
     validationSchema,
     onSubmit: async (value) => {
@@ -115,18 +107,16 @@ export function AccountDetailsForm({
           const { data } = await UploadService.upload(formData);
           imageUrl = data;
         }
+        const payload = {
+          ...value,
+          imageUrl: imageUrl ?? defaultData?.imageUrl,
+        }
         if (pathname === PROFILE_PAGE) {
-          await AuthService.updateUserInfo({
-            ...value,
-            imageUrl: imageUrl ?? defaultData.imageUrl,
-          });
+          await AuthService.updateUserInfo(payload);
         } else if (pathname === NEW_USER) {
-          await AuthService.register({
-            ...value,
-            imageUrl: imageUrl ?? defaultData.imageUrl,
-          });
+          await AuthService.register(payload);
         } else {
-          // update user info
+          await UserService.updateUserInfo(payload)
         }
         enqueueSnackbar(t("notification.title.success"), {
           variant: "success",
@@ -147,14 +137,13 @@ export function AccountDetailsForm({
 
   React.useEffect(() => {
     getClassroom();
+    
   }, []);
 
   const showClassroomField = React.useMemo(() => {
     if (pathname === PROFILE_PAGE && isAdminAccount) return false;
     return true;
   }, [pathname, isAdminAccount]);
-
-  console.log(errors)
 
   return (
     <Card>

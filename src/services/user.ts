@@ -5,15 +5,21 @@ import type { ChangePasswordFormModel, UserInformationModel } from 'models/view/
 
 export const UserService = {
   getUserInfo: async (): Promise<BaseResponseModel<UserInformationModel>> => {
-    return api.get(API_PATH.USER + '/profile')
+    return api.post(API_PATH.USER + '/profile')
   },
   changePassword: async (data: ChangePasswordFormModel): Promise<BaseResponseModel<string>> => {
     return api.post(API_PATH.USER + '/change_password', data)
   },
   getList: async (): Promise<BaseResponseModel<UserInformationModel[]>> => {
-    return api.get(API_PATH.USER + '/list')
+    return api.post(API_PATH.USER + '/list')
   },
   delete: async (email: string): Promise<BaseResponseModel<string>> => {
     return api.post(API_PATH.USER + '/delete?email=' + email)
+  },
+  getDetail: async (email: string): Promise<BaseResponseModel<UserInformationModel>> => {
+    return api.post(API_PATH.USER + '/detail', { email })
+  },
+  updateUserInfo: async (data: UserInformationModel): Promise<BaseResponseModel<string>> => {
+    return api.post(API_PATH.USER + '/update', data)
   },
 }

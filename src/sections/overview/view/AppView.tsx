@@ -25,7 +25,7 @@ export default function AppView() {
         Hi, Welcome back 👋
       </Typography>
 
-      <Grid container spacing={3}>
+      {/* <Grid container spacing={3}>
         <Grid xs={12} sm={6} md={3}>
           <AppWidgetSummary
             title="Weekly Sales"
@@ -224,7 +224,7 @@ export default function AppView() {
             ]}
           />
         </Grid>
-      </Grid>
+      </Grid> */}
     </Container>
   );
 }

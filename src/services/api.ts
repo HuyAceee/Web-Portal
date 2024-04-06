@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import { BASE_URL } from 'constant';
 import { ACCESS_TOKEN } from 'constant/key';
+import { LOGIN_PAGE } from 'constant/router';
 import { handleLocalStorage } from 'utils/localStorage';
 
 export const api = axios.create({
@@ -28,7 +28,9 @@ api.interceptors.response.use(
     return response.data
   },
   function (error) {
-    if (error.response.data.code === 401) {
+    if (error.response.status === 401 || error.response.status === 403) {
+      console.log(error)
+      window.location.replace(LOGIN_PAGE)
     }
     return Promise.reject(error)
   }

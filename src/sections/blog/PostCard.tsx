@@ -6,7 +6,7 @@ import Avatar from "@mui/material/Avatar";
 import { alpha } from "@mui/material/styles";
 import Grid from "@mui/material/Unstable_Grid2";
 import Typography from "@mui/material/Typography";
-import { fDate } from "utils/formatTime";
+import { fDate, formatDate_YYYY_MM_DD } from "utils/formatTime";
 import { fShortenNumber } from "utils/formatNumber";
 import SvgColor from "components/SvgColor";
 import Iconify from "components/Iconify";
@@ -117,7 +117,7 @@ export default function PostCard({ post, index }: PostCardProps) {
         }),
       }}
     >
-      {fDate(startDate) + " - " + fDate(endDate)}
+      {formatDate_YYYY_MM_DD(startDate) + " - " + formatDate_YYYY_MM_DD(endDate)}
     </Typography>
   );
 

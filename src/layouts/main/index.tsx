@@ -14,6 +14,8 @@ export default function MainLayout({ children }: { children: ReactNode }) {
           minHeight: 1,
           display: "flex",
           flexDirection: { xs: "column", lg: "row" },
+          pt: 8,
+          overflow: 'hidden'
         }}
       >
         {children}

@@ -10,6 +10,7 @@ import {
   PRODUCTS_PAGE,
   PROFILE_PAGE,
   RESET_PASSWORD,
+  SEMESTER_PAGE,
   UPDATE_USER,
   USER_PAGE,
 } from "./router";
@@ -27,12 +28,12 @@ export const ROUTER_NO_AUTH = [MAIN_PAGE, RESET_PASSWORD];
 const IndexPage = lazy(() => import("pages/App"));
 const UserPage = lazy(() => import("pages/User"));
 const NotificationPage = lazy(() => import("pages/Blog"));
-const ProductsPage = lazy(() => import("pages/Products"));
 const ProfilePage = lazy(() => import("pages/Profile"));
 const ChangePasswordPage = lazy(() => import("pages/ChangePassword"));
 const ContactAdminPage = lazy(() => import("pages/user/ContactAdmin"));
 const NewNotificationPage = lazy(() => import("pages/admin/NotificationForm"));
 const UserFormPage = lazy(() => import("pages/admin/UserForm"));
+const SemesterPage = lazy(() => import("pages/admin/Semester"));
 
 interface RouterItemModel {
   index?: boolean;
@@ -91,12 +92,12 @@ export const routerAdmin: RouterItemModel[] = [
     icon: icon("ic_profile"),
   },
   { path: USER_PAGE, element: UserPage, title: "user", icon: icon("ic_user") },
-  {
-    path: PRODUCTS_PAGE,
-    element: ProductsPage,
-    title: "product",
-    icon: icon("ic_cart"),
-  },
+  // {
+  //   path: PRODUCTS_PAGE,
+  //   element: ProductsPage,
+  //   title: "product",
+  //   icon: icon("ic_cart"),
+  // },
   {
     path: CHANGE_PASSWORD_PAGE,
     element: ChangePasswordPage,
@@ -131,5 +132,10 @@ export const routerAdmin: RouterItemModel[] = [
     element: UserFormPage,
     title: "contact",
     isHiddenMenu: true,
+  },
+  {
+    path: SEMESTER_PAGE,
+    element: SemesterPage,
+    title: "semester"
   },
 ];

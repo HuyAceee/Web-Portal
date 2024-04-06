@@ -21,3 +21,9 @@ export enum AccountPageEnum {
   NEW = "NEW",
   UPDATE = "UPDATE",
 }
+
+export interface CardModel {
+  image: string;
+  title: string;
+  description: string;
+}

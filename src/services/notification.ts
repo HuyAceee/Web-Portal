@@ -8,6 +8,6 @@ export const NotificationService = {
     return api.post(API_PATH.NOTIFICATION + '/create', data)
   },
   getList: async (): Promise<NotificationModel[]> => {
-    return api.get(API_PATH.NOTIFICATION + '/list')
+    return api.post(API_PATH.NOTIFICATION + '/list')
   }
 }

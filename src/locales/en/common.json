@@ -12,7 +12,8 @@
     "notification": "Notification",
     "addUser": "Add User",
     "updateUser": "Update User",
-    "main": "Main page"
+    "main": "Main page",
+    "semester": "Semester page"
   },
   "path": {
     "title": {

@@ -29,9 +29,9 @@ export function AuthProvider({ children }: IAuthProviderProps) {
   const { t } = useTranslation();
   const { removeLocalStorage, getLocalStorage, setLocalStorage } =
     handleLocalStorage();
-    const router = useRouter();
-    const pathname = usePathname();
-    const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
+  const pathname = usePathname();
+  const { enqueueSnackbar } = useSnackbar();
   const [userInfo, setUserInfo] = useState({} as UserInformationModel);
 
   const handleError = () => {
@@ -53,7 +53,7 @@ export function AuthProvider({ children }: IAuthProviderProps) {
       setUserInfo(data);
       setLocalStorage(ROLE, data.role);
     } catch (error) {
-      handleError()
+      handleError();
     }
   };
   useEffect(() => {

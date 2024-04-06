@@ -3,10 +3,11 @@ import AppBar from "@mui/material/AppBar";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import { useTheme } from "@mui/material/styles";
+import { DASHBOARD_PAGE } from "constant/router";
 import { AuthContext } from "contexts/AuthContext";
-import { useResponsive } from "hooks/useResponsive";
-import { HEADER, NAV } from "layouts/dashboard/ConfigLayout";
+import { HEADER } from "layouts/dashboard/ConfigLayout";
 import { useContext } from "react";
+import { useRouter } from "routes/hooks";
 import { bgBlur } from "theme/css";
 import { convertImageUrl } from "utils/common";
 
@@ -15,10 +16,15 @@ import { convertImageUrl } from "utils/common";
 export default function Header() {
   const theme = useTheme();
   const { userInfo } = useContext(AuthContext);
+  const router = useRouter();
 
   const renderContent = (
     <Stack direction="row" alignItems="center" spacing={1}>
-      <Avatar src={convertImageUrl(userInfo.imageUrl)} />
+      <Avatar
+        src={convertImageUrl(userInfo.imageUrl)}
+        sx={{ cursor: "pointer" }}
+        onClick={() => router.push(DASHBOARD_PAGE)}
+      />
     </Stack>
   );
 
@@ -43,7 +49,7 @@ export default function Header() {
           height: 1,
           px: { lg: 5 },
           backdropFilter: "blur(20px)",
-          justifyContent: 'flex-end'
+          justifyContent: "flex-end",
         }}
       >
         {renderContent}

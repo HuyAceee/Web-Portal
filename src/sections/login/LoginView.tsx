@@ -59,9 +59,11 @@ export default function LoginView() {
       password: Yup.string().required(t(fieldRequired)),
     }),
     onSubmit: async (value) => {
+      console.log(21312312)
       try {
         openLoading();
         const { data: accessToken } = await AuthService.login(value);
+        console.log(accessToken)
         setLocalStorage(ACCESS_TOKEN, accessToken);
         enqueueSnackbar(t("notification.title.loginSuccess"), {
           variant: "success",

@@ -6,7 +6,6 @@ import dayjs from "dayjs";
 
 export function fDate(date: string, newFormat?: string) {
   const fm = newFormat || "dd MMM yyyy";
-
   return date ? format(new Date(date), fm) : "";
 }
 
@@ -32,7 +31,7 @@ export function formatDate_YYYY_MM_DD(
   date: string = "",
   format: string = FORMAT_DATE_YYYY_MM_DD
 ) {
-  return (date ? dayjs(date) : dayjs()).format(format);
+  return (date ? dayjs(convertDate(date)) : dayjs())?.format(format);
 }
 
 export const convertDate = (date: string) => {

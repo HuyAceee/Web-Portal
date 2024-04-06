@@ -1,20 +1,18 @@
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
-import { BlogView } from "sections/blog/view";
-import { LoginView } from "sections/login";
-import { MainView } from "sections/main/view";
+import { SemesterView } from "sections/semester/view";
 
 // ----------------------------------------------------------------------
 
-export default function MainPage() {
+export default function SemesterPage() {
   const { t } = useTranslation();
   return (
     <>
       <Helmet>
-        <title> {t("title.main")} </title>
+        <title> {t("title.semester")} </title>
       </Helmet>
 
-      <MainView />
+      <SemesterView />
     </>
   );
 }

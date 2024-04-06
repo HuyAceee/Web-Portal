@@ -102,6 +102,7 @@ export function NotificationForm({
                     label={t("blog.form.startDate")}
                     name="startDate"
                     selectedSections="all"
+                    format="DD/MM/YYYY"
                     value={dayjs(values.startDate)}
                     onChange={(value: any) => {
                       setFieldValue("startDate", Date.parse(value));

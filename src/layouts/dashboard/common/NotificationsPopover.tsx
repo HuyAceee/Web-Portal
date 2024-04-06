@@ -21,6 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { NotificationService } from "services/notification";
 import { convertImageUrl } from "utils/common";
 import { useTranslation } from "react-i18next";
+import { formatDate_YYYY_MM_DD } from "utils/formatTime";
 
 // ----------------------------------------------------------------------
 
@@ -145,7 +146,7 @@ function NotificationItem({ notification, onClose }: NotificationItemProps) {
               icon="eva:clock-outline"
               sx={{ mr: 0.5, width: 16, height: 16 }}
             />
-            {dayjs(notification.startDate).format('YYYY-MM-DD')} - {dayjs(notification.endDate).format('YYYY-MM-DD')}
+            {formatDate_YYYY_MM_DD(notification.startDate)} - {formatDate_YYYY_MM_DD(notification.endDate)}
           </Typography>
         }
       />
