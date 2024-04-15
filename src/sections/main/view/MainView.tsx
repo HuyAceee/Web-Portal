@@ -6,7 +6,7 @@ import EducationScience from "./EducationScience";
 import Interesting from "./Interesting";
 
 const MainView = () => {
-  return (
+return (
     <Box sx={{ maxWidth: "100vw" }}>
       <Slider list={BANNERS} />
       <Box

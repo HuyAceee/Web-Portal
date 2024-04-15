@@ -1,0 +1,32 @@
+{
+  "semester": {
+    "list": {
+      "title": "Семестр",
+      "addNew": "Добавить семестр"
+    },
+    "form": {
+      "title": "Новый семестр",
+      "classroom": "Классная комната",
+      "addSubject": "Добавить предмет",
+      "addSubjectTime": "Добавить время занятия",
+      "subjectIndex": "Предмет {{ index }}",
+      "subjectTimeIndex": "Время занятия {{ index }}",
+      "subjectName": "Название предмета",
+      "type": "Тип",
+      "className": "Название класса",
+      "teacherName": "Имя преподавателя",
+      "week": "Неделя",
+      "park": "Практика",
+      "lab": "Лабораторная",
+      "lecturePack": "Лекция",
+      "subjectTime": "Время занятий"
+    },
+    "table": {
+      "header": {
+        "classroomId": "Идентификатор класса",
+        "startDate": "Дата начала",
+        "endDate": "Дата окончания"
+      }
+    }
+  }
+}

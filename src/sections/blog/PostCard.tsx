@@ -61,12 +61,12 @@ export default function PostCard({ post, index }: PostCardProps) {
       variant="subtitle2"
       underline="hover"
       sx={{
-        height: 40,
+        height: 120,
         overflow: "hidden",
         WebkitLineClamp: 2,
         display: "-webkit-box",
         WebkitBoxOrient: "vertical",
-        ...(latestPostLarge && { typography: "h5", height: 40 }),
+        ...(latestPostLarge && { typography: "h5", height: 120 }),
         ...((latestPostLarge || latestPost) && {
           color: "common.white",
         }),

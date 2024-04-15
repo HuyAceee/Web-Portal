@@ -5,22 +5,33 @@
       "title": "Профиль"
     },
     "form": {
-      "accountName": "Имя учетной записи",
+      "accountName": "Имя учётной записи",
       "emailAddress": "Адрес электронной почты",
-      "class": "Сорт",
+      "class": "Класс",
       "gender": "Пол",
       "birthday": "День рождения",
-      "phoneNumber": "Номер телефона"
+      "phoneNumber": "Номер телефона",
+      "oldPassword": "Старый пароль",
+      "newPassword": "Новый пароль",
+      "confirmPassword": "Подтвердить пароль"
+    },
+    "action": {
+      "save": "Сохранить",
+      "changePassword": "Изменить пароль"
     },
     "options": {
       "gender": {
-        "male": "Мужской",
-        "female": "Женский"
+        "male": "Мужчина",
+        "female": "Женщина"
       }
     },
     "info": {
-        "title": "Account",
-        "upload": "Upload picture"
+      "title": "Учетная запись",
+      "upload": "Загрузить изображение"
+    },
+    "changePassword": {
+      "subheader": "Пароль можно редактировать",
+      "title": "Изменить пароль"
     }
   }
 }

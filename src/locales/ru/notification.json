@@ -1,0 +1,31 @@
+{
+  "notification": {
+    "button": {
+      "cancel": "Отменить (Otmenit')",
+      "agree": "Согласен (Soglasen)",
+      "newNotification": "Новое уведомление (Novoe uvedomlenie)"
+    },
+    "title": {
+      "success": "Успех! (Uspekh!)",
+      "fail": "Ошибка! (Oshibka!)",
+      "default": "Уведомления (Uvedomleniya)",
+      "confirmChangePassword": "Подтверждение смены пароля (Podtverzhdenie smeny parolya)",
+      "loginSuccess": "Вход выполнен успешно! (Vkhod vypolnen uspeshno!)",
+      "loginFail": "Не удалось войти в систему! (Ne udalos' voyti v sistemu!)",
+      "loginAgain": "Пожалуйста, войдите снова! (Poжалуйста, voydite znovu!)",
+      "updateProfileSuccess": "Обновление профиля успешно! (Obnovlenie profilya uspeshno!)",
+      "updateProfileFail": "Не удалось обновить профиль! (Ne udalos' obnovit' profil!)",
+      "createSuccess": "Создание успешно! (Sozdanie uspeshno!)",
+      "createFail": "Не удалось создать! (Ne udalos' sozdat'!)",
+      "pleaseChooseImage": "Пожалуйста, выберите изображение (Poжалуйста, vyberite izobrazhenie)",
+      "confirmDelete": "Подтвердить удаление (Podtverdit' udalenie)"
+    },
+    "content": {
+      "confirmChangePassword": "Вы хотите изменить пароль? (Vy khotite izmenit' parol'?)",
+      "changePasswordSuccess": "Вы успешно изменили пароль. Пожалуйста, войдите снова! (Vy uspeshno izmenili parol'. Poжалуйста, voydite znovu!)",
+      "changePasswordFail": "Не удалось изменить пароль (Ne udalos' izmenit' parol')",
+      "resetPasswordSuccess": "Новый пароль был отправлен на вашу электронную почту. Пожалуйста, войдите снова! (Novyy parol' byl otpravlen na vashtu elektronnuyu pochtu. Poжалуйста, voydite znovu!)",
+      "resetPasswordFail": "Не удалось сбросить пароль (Ne udalos' sbrosit' parol')"
+    }
+  }
+}

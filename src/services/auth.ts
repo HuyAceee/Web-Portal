@@ -9,7 +9,7 @@ export const AuthService = {
     return api.post(API_PATH.AUTH + "/login", data);
   },
   updateUserInfo: async (data: UserInformationModel): Promise<BaseResponseModel<string>> => {
-    return api.post(API_PATH.AUTH + '/update', data)
+    return api.post(API_PATH.USER + '/update', data)
   },
   resetPassword: async (data: ResetPasswordFormModel): Promise<BaseResponseModel<string>> => {
     return api.post(API_PATH.AUTH + '/reset_password', data)

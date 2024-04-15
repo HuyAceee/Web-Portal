@@ -62,6 +62,8 @@ export function AccountInfo({ selectedFile, setSelectedFile, defaultData = {} as
     setSelectedFile(e.target.files[0]);
   };
 
+  console.log(convertImageUrl(defaultData?.imageUrl))
+
   return (
     <Card>
       <CardContent>

@@ -59,7 +59,6 @@ export default function LoginView() {
       password: Yup.string().required(t(fieldRequired)),
     }),
     onSubmit: async (value) => {
-      console.log(21312312)
       try {
         openLoading();
         const { data: accessToken } = await AuthService.login(value);

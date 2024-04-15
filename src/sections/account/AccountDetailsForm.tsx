@@ -82,11 +82,10 @@ export function AccountDetailsForm({
     name: Yup.string().required(t(fieldRequired)),
     email: Yup.string().required(t(fieldRequired)).email(t(fieldEmail)),
     isFemale: Yup.number().required(t(fieldRequired)),
-    birthDate: Yup.string().required(t(fieldRequired)),
     phoneNumber: Yup.string()
       .required(t(fieldRequired))
       .matches(phoneNumberRegex, t(fieldPhoneNumber)),
-    ...(!isAdminAccount ? { classroom: Yup.string().required() } : {}),
+    ...(!isAdminAccount ? { classroomId: Yup.string().required() } : {}),
   });
 
   const formik = useFormik<UserInformationModel>({
@@ -108,7 +107,10 @@ export function AccountDetailsForm({
         }
         const payload = {
           ...value,
+          classroom: value.classroomId,
           imageUrl: imageUrl ?? defaultData?.imageUrl,
+          isFemale: !value.isFemale,
+          birthDate: value.birthDate || dayjs().valueOf()
         }
         if (pathname === PROFILE_PAGE) {
           await AuthService.updateUserInfo(payload);
@@ -193,12 +195,12 @@ export function AccountDetailsForm({
                 <InputLabel>{t("profile.form.class")}</InputLabel>
                 <Select
                   label="Classroom"
-                  name="classroom"
-                  value={values.classroom}
+                  name="classroomId"
+                  value={values.classroomId}
                   onChange={handleChange}
                   variant="outlined"
                   disabled={pathname === PROFILE_PAGE}
-                  error={!!errors.classroom && touched.classroom}
+                  error={!!errors.classroomId && touched.classroomId}
                 >
                   {classroomOptions.map((option, index) => (
                     <MenuItem key={index.toString()} value={option.value}>
@@ -206,9 +208,9 @@ export function AccountDetailsForm({
                     </MenuItem>
                   ))}
                 </Select>
-                {!!errors.classroom && touched.classroom && (
+                {!!errors.classroomId && touched.classroomId && (
                   <FormHelperText error id="accountId-error">
-                    {errors.classroom}
+                    {errors.classroomId}
                   </FormHelperText>
                 )}
               </FormControl>
@@ -244,7 +246,7 @@ export function AccountDetailsForm({
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer components={["DatePicker"]}>
                   <DatePicker
-                    label="Birthday"
+                    label={t("profile.form.birthday")}
                     name="birthDate"
                     sx={{
                       width: '100%'
@@ -270,7 +272,6 @@ export function AccountDetailsForm({
               <InputLabel>{t("profile.form.phoneNumber")}</InputLabel>
               <OutlinedInput
                 label="Phone number"
-                type="number"
                 name="phoneNumber"
                 value={values.phoneNumber}
                 onChange={handleChange}

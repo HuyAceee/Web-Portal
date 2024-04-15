@@ -12,6 +12,7 @@ interface ISliderProps {
   spaceBetween?: number;
   modules?: any[];
   pagination?: boolean;
+  unusedClass?: boolean
 }
 
 export default function Slider({
@@ -19,6 +20,7 @@ export default function Slider({
   spaceBetween = 0,
   modules = [],
   pagination = false,
+  unusedClass = false
 }: ISliderProps) {
   return (
     <Swiper
@@ -41,7 +43,7 @@ export default function Slider({
       {list.map((slider, index) => {
         return (
           <SwiperSlide key={index}>
-            <img src={slider} className="img-slider-full"/>
+            <img src={slider} className={!unusedClass ? "img-slider-full" : ""}/>
           </SwiperSlide>
         );
       })}

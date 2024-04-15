@@ -9,38 +9,45 @@ import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
 import Grid from "@mui/material/Unstable_Grid2";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { FORMAT_DATE_DD_MM_YYYY, FORMAT_DATE_YYYY_MM_DD } from "constant";
-import { ACCESS_TOKEN } from "constant/key";
-import { LOGIN_PAGE } from "constant/router";
-import {
-  fieldConfirmPasswordNotMatch,
-  fieldRequired,
-} from "constant/validation";
+import { SEMESTER_PAGE } from "constant/router";
+import { fieldRequired } from "constant/validation";
 import { DialogContext } from "contexts/DialogContext";
 import { LoadingContext } from "contexts/LoadingContext";
 import dayjs from "dayjs";
 import { Field, FormikProvider, useFormik } from "formik";
 import type { ClassroomModel } from "models/view/classroom";
-import type {
-  SemesterFormModel,
-  SubjectModel,
-  SubjectTimeModel,
+import {
+  SubjectTimeTypeEnum,
+  type SemesterFormModel,
+  type SubjectModel,
+  type SubjectTimeModel,
 } from "models/view/semester";
-import type { ChangePasswordFormModel } from "models/view/user";
 import { useSnackbar } from "notistack";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "routes/hooks";
 import { ClassroomService } from "services/classroom";
 import { SemesterService } from "services/semester";
-import { UserService } from "services/user";
-import { handleLocalStorage } from "utils/localStorage";
 import * as Yup from "yup";
+
+const typeOptions = [
+  {
+    label: "semester.form.park",
+    value: SubjectTimeTypeEnum.PRAK,
+  },
+  {
+    label: "semester.form.lab",
+    value: SubjectTimeTypeEnum.LAB,
+  },
+  {
+    label: "semester.form.lecturePack",
+    value: SubjectTimeTypeEnum.LECTURE_PARK,
+  },
+];
 
 export function SemesterForm(): JSX.Element {
   const { t } = useTranslation();
@@ -64,8 +71,8 @@ export function SemesterForm(): JSX.Element {
     enableReinitialize: true,
     initialValues: {
       classroomId: 0,
-      startDate: dayjs().valueOf(),
-      endDate: dayjs().valueOf(),
+      startDate: undefined,
+      endDate: undefined,
       listSubject: [],
     },
     validationSchema: Yup.object({
@@ -87,11 +94,27 @@ export function SemesterForm(): JSX.Element {
       ),
     }),
     onSubmit: async (value) => {
-      await SemesterService.create(value);
+      console.log(value);
       openDialog?.({
         content: "notification.content.confirmChangePassword",
         title: "notification.title.confirmChangePassword",
-        onConfirm: async () => {},
+        onConfirm: async () => {
+          try {
+            openLoading();
+            await SemesterService.create({
+              ...value,
+              startDate: value.startDate || dayjs().valueOf(),
+              endDate: value.endDate || dayjs().valueOf(),
+            });
+            enqueueSnackbar(t("notification.title.success"), {
+              variant: "success",
+            });
+            router.push(SEMESTER_PAGE);
+          } catch (error) {
+          } finally {
+            closeLoading();
+          }
+        },
       });
     },
   });
@@ -107,6 +130,8 @@ export function SemesterForm(): JSX.Element {
   } = formik;
 
   const errors = errorsValidate as any;
+
+  console.log(values);
 
   useEffect(() => {
     getClassroom();
@@ -129,7 +154,10 @@ export function SemesterForm(): JSX.Element {
                   i === subjectTimeIndex
                     ? ({
                         ...subjectTime,
-                        [key]: key === 'type' || key === 'week' ? Number(value) : value,
+                        [key]:
+                          key === "type" || key === "week"
+                            ? Number(value)
+                            : value,
                       } as SubjectTimeModel)
                     : subjectTime
               ) as SubjectTimeModel[],
@@ -264,7 +292,7 @@ export function SemesterForm(): JSX.Element {
                 }
               />
               <div>
-                <h4>Subject Times</h4>
+                <h4>{t("semester.form.subjectTime")}</h4>
                 <Button
                   variant="contained"
                   color="secondary"
@@ -294,44 +322,58 @@ export function SemesterForm(): JSX.Element {
                   <div key={timeIndex}>
                     <h3>
                       {t("semester.form.subjectTimeIndex", {
-                        index: index + 1,
+                        index: timeIndex + 1,
                       })}
                     </h3>
                     <Grid spacing={3}>
-                      <TextField
-                        label={t("semester.form.type")}
-                        type="number"
-                        sx={{ pr: 2 }}
-                        value={time.type}
-                        onChange={(event: any) => {
-                          handleChangeSubjectTimeField(
-                            index,
-                            timeIndex,
-                            event.target.value,
-                            "type"
-                          );
-                        }}
-                        error={
-                          errors.listSubject &&
+                      <FormControl required sx={{ flex: 1 }}>
+                        <InputLabel>{t("semester.form.type")}</InputLabel>
+                        <Select
+                          label={t("semester.form.type")}
+                          value={time.type}
+                          sx={{ width: 220, mr: 2 }}
+                          onChange={(event: any) => {
+                            handleChangeSubjectTimeField(
+                              index,
+                              timeIndex,
+                              event.target.value,
+                              "type"
+                            );
+                          }}
+                          variant="outlined"
+                          error={
+                            errors.listSubject &&
+                            errors.listSubject[index] &&
+                            errors.listSubject[index].listSubjectTime &&
+                            errors.listSubject[index].listSubjectTime[
+                              timeIndex
+                            ] &&
+                            errors.listSubject[index].listSubjectTime[timeIndex]
+                              .type
+                          }
+                        >
+                          {typeOptions.map((option, index) => (
+                            <MenuItem
+                              key={index.toString()}
+                              value={option.value}
+                            >
+                              {t(option.label)}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                        {errors.listSubject &&
                           errors.listSubject[index] &&
                           errors.listSubject[index].listSubjectTime &&
                           errors.listSubject[index].listSubjectTime[
                             timeIndex
                           ] &&
                           errors.listSubject[index].listSubjectTime[timeIndex]
-                            .type
-                        }
-                        helperText={
-                          errors.listSubject &&
-                          errors.listSubject[index] &&
-                          errors.listSubject[index].listSubjectTime &&
-                          errors.listSubject[index].listSubjectTime[
-                            timeIndex
-                          ] &&
-                          errors.listSubject[index].listSubjectTime[timeIndex]
-                            .type
-                        }
-                      />
+                            .type && (
+                            <FormHelperText error id="accountId-error">
+                              {errors.classroom}
+                            </FormHelperText>
+                          )}
+                      </FormControl>
                       <TextField
                         label={t("semester.form.teacherName")}
                         value={time.teacherName}

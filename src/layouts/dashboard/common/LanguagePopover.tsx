@@ -17,7 +17,7 @@ const LANGS = [
   },
   {
     value: 'ru',
-    label: 'Rusia',
+    label: 'Russian',
     icon: '/assets/icons/ic_flag_ru.svg',
   }
 ];

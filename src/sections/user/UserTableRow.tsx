@@ -97,7 +97,7 @@ export default function UserTableRow({ data, fetchData }: UserTableRowProps) {
         <TableCell align="center">{data.email}</TableCell>
 
         <TableCell align="center">
-          {formatDate_YYYY_MM_DD(data.birthDate)}
+          {formatDate_YYYY_MM_DD(data.birthDate ?? '')}
         </TableCell>
 
         <TableCell align="center">

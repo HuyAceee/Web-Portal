@@ -28,7 +28,7 @@ export function fToNow(date: string) {
 }
 
 export function formatDate_YYYY_MM_DD(
-  date: string = "",
+  date: string | number | undefined = "",
   format: string = FORMAT_DATE_YYYY_MM_DD
 ) {
   return (date ? dayjs(convertDate(date)) : dayjs())?.format(format);

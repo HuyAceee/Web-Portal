@@ -13,10 +13,11 @@
     "addUser": "Add User",
     "updateUser": "Update User",
     "main": "Main page",
-    "semester": "Semester page"
+    "semester": "Semester",
+    "map": "Map"
   },
   "path": {
-    "title": {
+  "title": {
       "home": "Home",
       "profile": "Profile"
     }

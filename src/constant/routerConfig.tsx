@@ -14,6 +14,7 @@ import {
   SEMESTER_PAGE,
   UPDATE_USER,
   USER_PAGE,
+  MAP
 } from "./router";
 import SvgColor from "components/SvgColor";
 
@@ -36,6 +37,7 @@ const NewNotificationPage = lazy(() => import("pages/admin/NotificationForm"));
 const UserFormPage = lazy(() => import("pages/admin/UserForm"));
 const SemesterPage = lazy(() => import("pages/admin/Semester"));
 const NewSemesterPage = lazy(() => import("sections/semester/NewSemesterView"));
+const MapPage = lazy(() => import("sections/map/view/MapView"));
 
 interface RouterItemModel {
   index?: boolean;
@@ -51,13 +53,13 @@ export const routerUser: RouterItemModel[] = [
     path: DASHBOARD_PAGE,
     element: IndexPage,
     index: true,
-    title: "dashboard",
+    title: "title.dashboard",
     icon: icon("ic_analytics"),
   },
   {
     path: PROFILE_PAGE,
     element: ProfilePage,
-    title: "profile",
+    title: "title.profile",
     icon: icon("ic_profile"),
   },
   {
@@ -68,13 +70,19 @@ export const routerUser: RouterItemModel[] = [
   {
     path: NOTIFICATION_PAGE,
     element: NotificationPage,
-    title: "notification",
+    title: "title.notification",
     icon: icon("ic_blog"),
   },
   {
     path: CONTACT_ADMIN,
     element: ContactAdminPage,
-    title: "contact",
+    title: "title.contactAdmin",
+    icon: icon("ic_contact-admin"),
+  },
+  {
+    path: MAP,
+    element: MapPage,
+    title: "title.map",
     icon: icon("ic_contact-admin"),
   },
 ];
@@ -84,16 +92,16 @@ export const routerAdmin: RouterItemModel[] = [
     path: DASHBOARD_PAGE,
     element: IndexPage,
     index: true,
-    title: "dashboard",
+    title: "title.dashboard",
     icon: icon("ic_analytics"),
   },
   {
     path: PROFILE_PAGE,
     element: ProfilePage,
-    title: "profile",
+    title: "title.profile",
     icon: icon("ic_profile"),
   },
-  { path: USER_PAGE, element: UserPage, title: "user", icon: icon("ic_user") },
+  { path: USER_PAGE, element: UserPage, title: "title.user", icon: icon("ic_user") },
   // {
   //   path: PRODUCTS_PAGE,
   //   element: ProductsPage,
@@ -108,42 +116,45 @@ export const routerAdmin: RouterItemModel[] = [
   {
     path: NOTIFICATION_PAGE,
     element: NotificationPage,
-    title: "notification",
+    title: "title.notification",
     icon: icon("ic_blog"),
   },
   {
     path: NEW_NOTIFICATION,
     element: NewNotificationPage,
-    title: "notification",
+    title: "title.notification",
     isHiddenMenu: true,
   },
   {
     path: CONTACT_ADMIN,
     element: ContactAdminPage,
-    title: "contact",
+    title: "title.contactAdmin",
     icon: icon("ic_contact-admin"),
   },
   {
     path: NEW_USER,
     element: UserFormPage,
-    title: "contact",
     isHiddenMenu: true,
   },
   {
     path: UPDATE_USER,
     element: UserFormPage,
-    title: "contact",
     isHiddenMenu: true,
   },
   {
     path: SEMESTER_PAGE,
     element: SemesterPage,
-    title: "semester"
+    title: "title.semester"
   },
   {
     path: NEW_SEMESTER,
     element: NewSemesterPage,
-    title: "semester",
     isHiddenMenu: true
+  },
+  {
+    path: MAP,
+    element: MapPage,
+    title: "title.map",
+    icon: icon("ic_contact-admin"),
   },
 ];

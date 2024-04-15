@@ -1,7 +1,8 @@
 {
     "semester": {
         "list": {
-            "title": "Semester"
+            "title": "Semester",
+            "addNew": "Add semester"
         },
         "form": {
             "title": "New Semester",
@@ -14,7 +15,18 @@
             "type": "Type",
             "className": "Class name",
             "teacherName": "Teacher name",
-            "week": "Week"
+            "week": "Week",
+            "park": "Prak",
+            "lab": "Lab",
+            "lecturePack": "Lecture",
+            "subjectTime": "Subject times"
+        },
+        "table": {
+            "header": {
+                "classroomId": "Classroom ID",
+                "startDate": "Start date",
+                "endDate": "End Date"
+            }
         }
     }
 }

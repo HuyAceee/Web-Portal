@@ -43,9 +43,7 @@ export function NotificationForm({
 
   const validationSchema = Yup.object({
     title: Yup.string().required(t(fieldRequired)),
-    description: Yup.string().required(t(fieldRequired)),
-    startDate: Yup.string().required(t(fieldRequired)),
-    endDate: Yup.string().required(t(fieldRequired)),
+    description: Yup.string().required(t(fieldRequired))
   });
 
   const formik = useFormik<NotificationModel>({
@@ -54,8 +52,8 @@ export function NotificationForm({
     initialValues: convertObjectWithDefaults<NotificationModel>({
       title: "",
       description: "",
-      startDate: formatDate_YYYY_MM_DD(),
-      endDate: formatDate_YYYY_MM_DD(),
+      startDate: undefined,
+      endDate: undefined,
     } as NotificationModel),
     validationSchema,
     onSubmit: async (value) => {
@@ -103,7 +101,7 @@ export function NotificationForm({
                     name="startDate"
                     selectedSections="all"
                     format="DD/MM/YYYY"
-                    value={dayjs(values.startDate)}
+                    value={values.startDate ? dayjs(values.startDate) : dayjs()}
                     onChange={(value: any) => {
                       setFieldValue("startDate", Date.parse(value));
                     }}
@@ -125,7 +123,8 @@ export function NotificationForm({
                     label={t("blog.form.endDate")}
                     name="endDate"
                     selectedSections="all"
-                    value={dayjs(values.endDate)}
+                    format="DD/MM/YYYY"
+                    value={values.startDate ? dayjs(values.endDate) : dayjs()}
                     onChange={(value: any) => {
                       setFieldValue("endDate", Date.parse(value));
                     }}
@@ -134,7 +133,7 @@ export function NotificationForm({
               </LocalizationProvider>
               {!!errors.endDate && touched.endDate && (
                 <FormHelperText error id="accountId-error">
-                  {errors.endDate}
+                  {(errors as any)?.endDate ?? ''}
                 </FormHelperText>
               )}
             </FormControl>

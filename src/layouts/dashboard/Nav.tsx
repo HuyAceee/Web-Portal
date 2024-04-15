@@ -20,6 +20,7 @@ import { routerAdmin, routerUser } from "constant/routerConfig";
 import { AuthContext } from "contexts/AuthContext";
 import { NAV } from "./ConfigLayout";
 import { convertImageUrl, isAdmin } from "utils/common";
+import { useTranslation } from "react-i18next";
 
 // ----------------------------------------------------------------------
 
@@ -132,6 +133,7 @@ export default function Nav({ openNav, onCloseNav }: any) {
 
 function NavItem({ item }: any) {
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   const active = item.path === pathname;
 
@@ -160,7 +162,7 @@ function NavItem({ item }: any) {
         {item.icon}
       </Box>
 
-      <Box component="span">{item.title} </Box>
+      <Box component="span">{t(item.title)} </Box>
     </ListItemButton>
   );
 }

@@ -1,7 +1,7 @@
 export interface SemesterFormModel {
-  classroomId: number;
-  startDate: string | number;
-  endDate: string | number;
+  classroomId?: number;
+  startDate?: string | number;
+  endDate?: string | number;
   listSubject: SubjectModel[];
 }
 
@@ -18,6 +18,7 @@ export interface SubjectTimeModel {
 }
 
 export enum SubjectTimeTypeEnum {
-  ESSAY,
-  QUIZ,
+  PRAK,
+  LAB,
+  LECTURE_PARK
 }
