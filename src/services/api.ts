@@ -17,7 +17,7 @@ const requestInterceptor = (config: AxiosRequestConfig): any => {
   if (accessToken && config.headers) {
     config.headers['Authorization'] = `Bearer ${accessToken}`;
   }
-  config.baseURL = "http://localhost:8080"
+  config.baseURL = "https://mail.lucifer.io.vn"
   return config;
 };
 

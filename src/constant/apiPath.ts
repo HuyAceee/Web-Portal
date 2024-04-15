@@ -5,4 +5,5 @@ export const API_PATH = {
   FILE: 'file',
   NOTIFICATION: 'notification',
   QUESTION: 'question',
+  SEMESTER: 'semester'
 };

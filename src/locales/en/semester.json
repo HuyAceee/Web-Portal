@@ -2,6 +2,19 @@
     "semester": {
         "list": {
             "title": "Semester"
+        },
+        "form": {
+            "title": "New Semester",
+            "classroom": "Classroom",
+            "addSubject": "Add subject",
+            "addSubjectTime": "Add subject time",
+            "subjectIndex": "Subject {{ index }}",
+            "subjectTimeIndex": "Subject time {{ index }}",
+            "subjectName": "Subject name",
+            "type": "Type",
+            "className": "Class name",
+            "teacherName": "Teacher name",
+            "week": "Week"
         }
     }
 }

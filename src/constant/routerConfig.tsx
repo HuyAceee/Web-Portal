@@ -5,6 +5,7 @@ import {
   DASHBOARD_PAGE,
   MAIN_PAGE,
   NEW_NOTIFICATION,
+  NEW_SEMESTER,
   NEW_USER,
   NOTIFICATION_PAGE,
   PRODUCTS_PAGE,
@@ -34,6 +35,7 @@ const ContactAdminPage = lazy(() => import("pages/user/ContactAdmin"));
 const NewNotificationPage = lazy(() => import("pages/admin/NotificationForm"));
 const UserFormPage = lazy(() => import("pages/admin/UserForm"));
 const SemesterPage = lazy(() => import("pages/admin/Semester"));
+const NewSemesterPage = lazy(() => import("sections/semester/NewSemesterView"));
 
 interface RouterItemModel {
   index?: boolean;
@@ -137,5 +139,11 @@ export const routerAdmin: RouterItemModel[] = [
     path: SEMESTER_PAGE,
     element: SemesterPage,
     title: "semester"
+  },
+  {
+    path: NEW_SEMESTER,
+    element: NewSemesterPage,
+    title: "semester",
+    isHiddenMenu: true
   },
 ];

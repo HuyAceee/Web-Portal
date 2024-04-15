@@ -55,7 +55,6 @@ export function AccountDetailsForm({
   selectedFile,
   defaultData = {} as UserInformationModel,
 }: AccountDetailsFormProps): React.JSX.Element {
-  console.log(defaultData)
   const pathname = usePathname();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
