@@ -85,7 +85,8 @@ export default function UserTableRow({ data, fetchData }: UserTableRowProps) {
             direction="row"
             alignItems="center"
             spacing={2}
-            justifyContent="center"
+            pl={5}
+            justifyContent="left"
           >
             <Avatar alt={data.name} src={convertImageUrl(data.imageUrl)} />
             <Typography variant="subtitle2" noWrap>

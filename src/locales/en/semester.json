@@ -23,7 +23,7 @@
         },
         "table": {
             "header": {
-                "classroomId": "Classroom ID",
+                "classroomId": "Classroom",
                 "startDate": "Start date",
                 "endDate": "End Date"
             }

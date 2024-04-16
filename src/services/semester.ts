@@ -9,5 +9,8 @@ export const SemesterService = {
   },
   listForUser: async (): Promise<BaseResponseModel<SemesterFormModel[]>> => {
     return api.post(API_PATH.SEMESTER + '/listForUser')
+  },
+  getDetail: async (id: string | number): Promise<BaseResponseModel<SemesterFormModel>> => {
+    return api.post(API_PATH.SEMESTER + '/detail', { id })
   }
 }

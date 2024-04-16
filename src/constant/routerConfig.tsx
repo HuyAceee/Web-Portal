@@ -14,7 +14,8 @@ import {
   SEMESTER_PAGE,
   UPDATE_USER,
   USER_PAGE,
-  MAP
+  MAP,
+  DETAIL_SEMESTER
 } from "./router";
 import SvgColor from "components/SvgColor";
 
@@ -38,6 +39,7 @@ const UserFormPage = lazy(() => import("pages/admin/UserForm"));
 const SemesterPage = lazy(() => import("pages/admin/Semester"));
 const NewSemesterPage = lazy(() => import("sections/semester/NewSemesterView"));
 const MapPage = lazy(() => import("sections/map/view/MapView"));
+const SemesterDetailPage = lazy(() => import("sections/semester/SemesterDetail"));
 
 interface RouterItemModel {
   index?: boolean;
@@ -83,7 +85,12 @@ export const routerUser: RouterItemModel[] = [
     path: MAP,
     element: MapPage,
     title: "title.map",
-    icon: icon("ic_contact-admin"),
+    icon: icon("ic_map"),
+  },
+  {
+    path: DETAIL_SEMESTER,
+    element: SemesterDetailPage,
+    isHiddenMenu: true
   },
 ];
 
@@ -144,7 +151,8 @@ export const routerAdmin: RouterItemModel[] = [
   {
     path: SEMESTER_PAGE,
     element: SemesterPage,
-    title: "title.semester"
+    title: "title.semester",
+    icon: icon("ic_semester"),
   },
   {
     path: NEW_SEMESTER,
@@ -152,9 +160,14 @@ export const routerAdmin: RouterItemModel[] = [
     isHiddenMenu: true
   },
   {
+    path: DETAIL_SEMESTER,
+    element: SemesterDetailPage,
+    isHiddenMenu: true
+  },
+  {
     path: MAP,
     element: MapPage,
     title: "title.map",
-    icon: icon("ic_contact-admin"),
+    icon: icon("ic_map"),
   },
 ];

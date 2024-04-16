@@ -14,30 +14,32 @@ import Scrollbar from "components/Scrollbar";
 import { NEW_SEMESTER } from "constant/router";
 import { LoadingContext } from "contexts/LoadingContext";
 import type { HeaderLabelModel } from "models/common";
+import type { ClassroomModel } from "models/view/classroom";
 import type { SemesterFormModel } from "models/view/semester";
-import type { UserInformationModel } from "models/view/user";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RouterLink } from "routes/components";
 import TableEmptyRows from "sections/user/TableEmptyRows";
 import TableNoData from "sections/user/TableNoData";
 import UserTableHead from "sections/user/UserTableHead";
-import UserTableRow from "sections/user/UserTableRow";
 import { emptyRows } from "sections/user/utils";
+import { ClassroomService } from "services/classroom";
 import { SemesterService } from "services/semester";
 import SemesterTableRow from "../SemesterTableRow";
 
 // ----------------------------------------------------------------------
 
 const HeaderLabel: HeaderLabelModel[] = [
-  { id: "classroomId", label: "semester.table.header.classroomId" },
+  { id: "classroomName", label: "semester.table.header.classroomId" },
   { id: "startDate", label: "semester.table.header.startDate" },
   { id: "endDate", label: "semester.table.header.endDate" },
+  { id: "", label: "" },
 ];
 
 export default function SemesterView() {
   const { t } = useTranslation();
   const { openLoading, closeLoading, loading } = useContext(LoadingContext);
+  const [classroom, setClassroom] = useState<ClassroomModel[]>([]);
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState<"asc" | "desc">("asc");
@@ -75,9 +77,29 @@ export default function SemesterView() {
     }
   };
 
+  const getClassroom = async () => {
+    try {
+      const data = await ClassroomService.getList();
+      setClassroom(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getSemester();
+    getClassroom();
   }, []);
+
+  const semestersMapping = useMemo(() => {
+    return semesters.map((semester) => {
+      const classroomName = classroom.find((elem) => elem.id === semester.classroomId)?.name;
+      return {
+        ...semester,
+        classroomName
+      }
+    })
+  }, [semesters, classroom]);
 
   return (
     <Container>
@@ -110,7 +132,7 @@ export default function SemesterView() {
                 headLabel={HeaderLabel}
               />
               <TableBody>
-                {semesters
+                {semestersMapping
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <SemesterTableRow key={index} data={row} />

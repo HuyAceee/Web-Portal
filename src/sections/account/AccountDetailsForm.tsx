@@ -38,6 +38,7 @@ import { ClassroomService } from "services/classroom";
 import { UploadService } from "services/upload";
 import { UserService } from "services/user";
 import { convertObjectWithDefaults, isAdmin } from "utils/common";
+import { convertDate } from "utils/formatTime";
 import { handleLocalStorage } from "utils/localStorage";
 import * as Yup from "yup";
 
@@ -87,13 +88,13 @@ export function AccountDetailsForm({
       .matches(phoneNumberRegex, t(fieldPhoneNumber)),
     ...(!isAdminAccount ? { classroomId: Yup.string().required() } : {}),
   });
-
   const formik = useFormik<UserInformationModel>({
     validateOnChange: true,
     enableReinitialize: true,
     initialValues: convertObjectWithDefaults<UserInformationModel>({
       ...defaultData,
       isFemale: defaultData?.isFemale ? 1 : 0,
+      birthDate: new Date(convertDate(defaultData?.birthDate as string ?? '')).valueOf()
     }),
     validationSchema,
     onSubmit: async (value) => {

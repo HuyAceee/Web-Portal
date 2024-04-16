@@ -31,7 +31,7 @@ export function formatDate_YYYY_MM_DD(
   date: string | number | undefined = "",
   format: string = FORMAT_DATE_YYYY_MM_DD
 ) {
-  return (date ? dayjs(convertDate(date)) : dayjs())?.format(format);
+  return (date ? dayjs(convertDate(date as string)) : dayjs())?.format(format);
 }
 
 export const convertDate = (date: string) => {

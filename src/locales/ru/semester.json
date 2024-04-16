@@ -23,7 +23,7 @@
     },
     "table": {
       "header": {
-        "classroomId": "Идентификатор класса",
+        "classroomId": "Идентификатор",
         "startDate": "Дата начала",
         "endDate": "Дата окончания"
       }

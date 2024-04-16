@@ -1,5 +1,7 @@
 export interface SemesterFormModel {
+  id?: number
   classroomId?: number;
+  classroomName?: string;
   startDate?: string | number;
   endDate?: string | number;
   listSubject: SubjectModel[];
