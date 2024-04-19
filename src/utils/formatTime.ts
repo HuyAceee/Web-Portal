@@ -34,7 +34,11 @@ export function formatDate_YYYY_MM_DD(
   return (date ? dayjs(convertDate(date as string)) : dayjs())?.format(format);
 }
 
-export const convertDate = (date: string) => {
-  const keys = date.split('/').reverse()
+export const convertDate = (date?: string) => {
+  let temp = date
+  if (!temp) {
+    temp = new Date().toISOString().split('T')[0]
+  }
+  const keys = temp.split('/').reverse()
   return keys.join('-')
 }

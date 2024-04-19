@@ -6,6 +6,7 @@ export const API_PATH = {
   NOTIFICATION: "notification",
   QUESTION: "question",
   SEMESTER: "semester",
+  POINT: "point"
 };
 
 export const BASE_ERROR_CODE = {

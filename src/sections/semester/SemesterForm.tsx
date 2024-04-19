@@ -80,18 +80,18 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
   const formik = useFormik<SemesterFormModel>({
     validateOnChange: false,
     enableReinitialize: true,
-    initialValues: ({
+    initialValues: defaultData ? ({
       ...defaultData,
       startDate: new Date(
-        convertDate((defaultData?.startDate as string) ?? "")
+        convertDate((defaultData?.startDate as string) ?? '')
       ).valueOf(),
       endDate: new Date(
         convertDate((defaultData?.endDate as string) ?? "")
       ).valueOf(),
-    } as SemesterFormModel) ?? {
-      classroomId: 0,
-      startDate: undefined,
-      endDate: undefined,
+    } as SemesterFormModel) : {
+      classroomId: undefined,
+      startDate: convertDate(),
+      endDate: convertDate(),
       listSubject: [],
     },
     validationSchema: Yup.object({
@@ -113,28 +113,21 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
       ),
     }),
     onSubmit: async (value) => {
-      console.log(value);
-      openDialog?.({
-        content: "notification.content.confirmChangePassword",
-        title: "notification.title.confirmChangePassword",
-        onConfirm: async () => {
-          try {
-            openLoading();
-            await SemesterService.create({
-              ...value,
-              startDate: value.startDate || dayjs().valueOf(),
-              endDate: value.endDate || dayjs().valueOf(),
-            });
-            enqueueSnackbar(t("notification.title.success"), {
-              variant: "success",
-            });
-            router.push(SEMESTER_PAGE);
-          } catch (error) {
-          } finally {
-            closeLoading();
-          }
-        },
-      });
+      try {
+        openLoading();
+        await SemesterService.create({
+          ...value,
+          startDate: value.startDate || dayjs().valueOf(),
+          endDate: value.endDate || dayjs().valueOf(),
+        });
+        enqueueSnackbar(t("notification.title.success"), {
+          variant: "success",
+        });
+        router.push(SEMESTER_PAGE);
+      } catch (error) {
+      } finally {
+        closeLoading();
+      }
     },
   });
 
@@ -168,7 +161,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
   ) => {
     setValues({
       ...values,
-      listSubject: values.listSubject?.map((subject, idx) =>
+      listSubject: values?.listSubject?.map((subject, idx) =>
         subjectIndex === idx
           ? {
               ...subject,
@@ -210,7 +203,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                       disabled={isDetail}
                       selectedSections="all"
                       format="DD/MM/YYYY"
-                      value={dayjs(values.startDate)}
+                      value={dayjs(values?.startDate)}
                       onChange={(value: any) => {
                         setFieldValue("startDate", Date.parse(value));
                       }}
@@ -233,7 +226,8 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                       name="endDate"
                       disabled={isDetail}
                       selectedSections="all"
-                      value={dayjs(values.endDate)}
+                      format="DD/MM/YYYY"
+                      value={dayjs(values?.endDate)}
                       onChange={(value: any) => {
                         setFieldValue("endDate", Date.parse(value));
                       }}
@@ -254,7 +248,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                   label="State"
                   name="classroomId"
                   disabled={isDetail}
-                  value={values.classroomId}
+                  value={values?.classroomId}
                   onChange={handleChange}
                   variant="outlined"
                   error={!!errors.classroomId && touched.classroomId}
@@ -280,13 +274,13 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
             onClick={() => {
               setValues({
                 ...values,
-                listSubject: [...values.listSubject, {} as SubjectModel],
+                listSubject: [...values?.listSubject, {} as SubjectModel],
               });
             }}
           >
             {t("semester.form.addSubject")}
           </Button>
-          {values.listSubject?.map((subject, index) => (
+          {values?.listSubject?.map((subject, index) => (
             <div key={index}>
               <Box
                 sx={{ display: "flex", flexDirection: "row", gap: "20px" }}
@@ -300,7 +294,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                   size="small"
                   sx={{ height: "30px" }}
                   onClick={() => {
-                    const newListSubject = values.listSubject.filter(
+                    const newListSubject = values?.listSubject?.filter(
                       (_, i) => i !== index
                     );
                     setValues({
@@ -319,7 +313,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                 onChange={(event: any) =>
                   setValues({
                     ...values,
-                    listSubject: values.listSubject.map((subject, idx) =>
+                    listSubject: values?.listSubject?.map((subject, idx) =>
                       index === idx
                         ? {
                             ...subject,
@@ -352,7 +346,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                   onClick={() => {
                     setValues({
                       ...values,
-                      listSubject: values?.listSubject.map((sub, subIndex) =>
+                      listSubject: values?.listSubject?.map((sub, subIndex) =>
                         subIndex === index
                           ? {
                               ...sub,
@@ -370,7 +364,7 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                 >
                   {t("semester.form.addSubjectTime")}
                 </Button>
-                {subject.listSubjectTime?.map((time, timeIndex) => (
+                {subject?.listSubjectTime?.map((time, timeIndex) => (
                   <div key={timeIndex}>
                     <Box
                       sx={{
@@ -392,12 +386,12 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
                         disabled={isDetail}
                         sx={{ height: "30px" }}
                         onClick={() => {
-                          const newListSubjectTime = values.listSubject[
+                          const newListSubjectTime = values?.listSubject[
                             index
-                          ].listSubjectTime.filter((_, i) => i !== timeIndex);
+                          ]?.listSubjectTime?.filter((_, i) => i !== timeIndex);
                           setValues({
                             ...values,
-                            listSubject: values?.listSubject.map(
+                            listSubject: values?.listSubject?.map(
                               (sub, subIndex) =>
                                 subIndex === index
                                   ? {

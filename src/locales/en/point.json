@@ -1,0 +1,10 @@
+{
+  "point": {
+    "list": {
+      "title": "Point",
+      "subjectName": "Subject name",
+      "semester": "Semester",
+      "point": "Point"
+    }
+  }
+}
