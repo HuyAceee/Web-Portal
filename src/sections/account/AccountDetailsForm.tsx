@@ -25,6 +25,7 @@ import {
   fieldPhoneNumber,
   fieldRequired,
 } from "constant/validation";
+import { AuthContext } from "contexts/AuthContext";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
 import type { ClassroomModel } from "models/view/classroom";
@@ -61,6 +62,7 @@ export function AccountDetailsForm({
   const { enqueueSnackbar } = useSnackbar();
   const { getLocalStorage } = handleLocalStorage();
   const router = useRouter();
+  const { handleGetUserInfor } = React.useContext(AuthContext);
   const [classroom, setClassroom] = React.useState<ClassroomModel[]>([]);
 
   const isAdminAccount = React.useMemo(() => {
@@ -86,13 +88,14 @@ export function AccountDetailsForm({
     phoneNumber: Yup.string()
       .required(t(fieldRequired))
       .matches(phoneNumberRegex, t(fieldPhoneNumber)),
-    ...(!isAdminAccount ? { classroomId: Yup.string().required() } : {}),
+    ...(isAdminAccount ? { classroomId: Yup.string().required() } : {}),
   });
   const formik = useFormik<UserInformationModel>({
     validateOnChange: true,
     enableReinitialize: true,
     initialValues: convertObjectWithDefaults<UserInformationModel>({
       ...defaultData,
+      ...(defaultData.classroom ? { classroomId: defaultData.classroom.id } : {}),
       isFemale: defaultData?.isFemale ? 1 : 0,
       birthDate: new Date(convertDate(defaultData?.birthDate as string ?? '')).valueOf()
     }),
@@ -108,13 +111,14 @@ export function AccountDetailsForm({
         }
         const payload = {
           ...value,
-          classroom: value.classroomId,
+          classroom: undefined,
           imageUrl: imageUrl ?? defaultData?.imageUrl,
           isFemale: !value.isFemale,
           birthDate: value.birthDate || dayjs().valueOf()
         }
         if (pathname === PROFILE_PAGE) {
           await AuthService.updateUserInfo(payload);
+          await handleGetUserInfor()
         } else if (pathname === NEW_USER) {
           await AuthService.register(payload);
         } else {
@@ -146,7 +150,6 @@ export function AccountDetailsForm({
     if (pathname === PROFILE_PAGE && isAdminAccount) return false;
     return true;
   }, [pathname, isAdminAccount]);
-
   return (
     <Card>
       <CardHeader
@@ -164,9 +167,9 @@ export function AccountDetailsForm({
                 name="name"
                 value={values.name}
                 onChange={handleChange}
-                error={!!errors.name && touched.name}
+                error={!!errors.name}
               />
-              {!!errors.name && touched.name && (
+              {!!errors.name && (
                 <FormHelperText error id="accountId-error">
                   {errors.name}
                 </FormHelperText>
@@ -181,9 +184,10 @@ export function AccountDetailsForm({
                 name="email"
                 value={values.email}
                 onChange={handleChange}
-                error={!!errors.email && touched.email}
+                disabled={pathname === PROFILE_PAGE}
+                error={!!errors.email}
               />
-              {!!errors.email && touched.email && (
+              {!!errors.email && (
                 <FormHelperText error id="accountId-error">
                   {errors.email}
                 </FormHelperText>
@@ -201,7 +205,7 @@ export function AccountDetailsForm({
                   onChange={handleChange}
                   variant="outlined"
                   disabled={pathname === PROFILE_PAGE}
-                  error={!!errors.classroomId && touched.classroomId}
+                  error={!!errors.classroomId}
                 >
                   {classroomOptions.map((option, index) => (
                     <MenuItem key={index.toString()} value={option.value}>
@@ -209,7 +213,7 @@ export function AccountDetailsForm({
                     </MenuItem>
                   ))}
                 </Select>
-                {!!errors.classroomId && touched.classroomId && (
+                {!!errors.classroomId && (
                   <FormHelperText error id="accountId-error">
                     {errors.classroomId}
                   </FormHelperText>
@@ -227,7 +231,7 @@ export function AccountDetailsForm({
                 value={values.isFemale}
                 onChange={handleChange}
                 variant="outlined"
-                error={!!errors.isFemale && touched.isFemale}
+                error={!!errors.isFemale}
               >
                 {genders.map((option, index) => (
                   <MenuItem key={index.toString()} value={option.value}>
@@ -235,7 +239,7 @@ export function AccountDetailsForm({
                   </MenuItem>
                 ))}
               </Select>
-              {!!errors.isFemale && touched.isFemale && (
+              {!!errors.isFemale && (
                 <FormHelperText error id="accountId-error">
                   {errors.isFemale}
                 </FormHelperText>
@@ -261,7 +265,7 @@ export function AccountDetailsForm({
                   />
                 </DemoContainer>
               </LocalizationProvider>
-              {!!errors.birthDate && touched.birthDate && (
+              {!!errors.birthDate && (
                 <FormHelperText error id="accountId-error">
                   {errors.birthDate}
                 </FormHelperText>
@@ -276,9 +280,9 @@ export function AccountDetailsForm({
                 name="phoneNumber"
                 value={values.phoneNumber}
                 onChange={handleChange}
-                error={!!errors.phoneNumber && touched.phoneNumber}
+                error={!!errors.phoneNumber}
               />
-              {!!errors.phoneNumber && touched.phoneNumber && (
+              {!!errors.phoneNumber && (
                 <FormHelperText error id="accountId-error">
                   {errors.phoneNumber}
                 </FormHelperText>

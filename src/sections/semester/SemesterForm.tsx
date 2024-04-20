@@ -143,8 +143,6 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
 
   const errors = errorsValidate as any;
 
-  console.log(values);
-
   useEffect(() => {
     getClassroom();
   }, []);

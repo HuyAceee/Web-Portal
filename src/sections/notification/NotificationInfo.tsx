@@ -6,15 +6,18 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
+import { DETAIL_NOTIFICATION } from "constant/router";
 import { AuthContext } from "contexts/AuthContext";
+import type { NotificationModel } from "models/view/notification";
 import {
-    Dispatch,
-    SetStateAction,
-    useContext,
-    useEffect,
-    useState,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 import { useTranslation } from "react-i18next";
+import { usePathname } from "routes/hooks";
 import { convertImageUrl } from "utils/common";
 
 const VisuallyHiddenInput = styled("input")({
@@ -32,13 +35,16 @@ const VisuallyHiddenInput = styled("input")({
 interface NotificationInfoProps {
   selectedFile: any;
   setSelectedFile: Dispatch<SetStateAction<undefined>>;
+  defaultData?: NotificationModel;
 }
 
 export function NotificationInfo({
   selectedFile,
   setSelectedFile,
+  defaultData,
 }: NotificationInfoProps): React.JSX.Element {
   const { t } = useTranslation();
+  const pathname = usePathname();
 
   const handleUploadFile = () => {
     document.getElementById("uploadImage")?.click();
@@ -74,11 +80,11 @@ export function NotificationInfo({
         <Stack sx={{ alignItems: "center" }}>
           <Container
             component={"img"}
-            src={preview}
+            src={preview ?? convertImageUrl(defaultData?.imageUrl ?? "")}
             sx={{
               height: "auto",
               width: "100%",
-              minHeight: '200px',
+              minHeight: "200px",
               paddingLeft: "0 !important",
               paddingRight: "0 !important",
             }}
@@ -86,24 +92,26 @@ export function NotificationInfo({
         </Stack>
       </CardContent>
       <Divider />
-      <CardActions>
-        <Button
-          role={undefined}
-          fullWidth
-          onClick={handleUploadFile}
-          variant="contained"
-          tabIndex={-1}
-          startIcon={<CloudUploadIcon />}
-        >
-          {t("profile.info.upload")}
-          <VisuallyHiddenInput
-            id="uploadImage"
-            type="file"
-            accept="image/*"
-            onChange={onSelectFile}
-          />
-        </Button>
-      </CardActions>
+      {pathname !== DETAIL_NOTIFICATION && (
+        <CardActions>
+          <Button
+            role={undefined}
+            fullWidth
+            onClick={handleUploadFile}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            {t("profile.info.upload")}
+            <VisuallyHiddenInput
+              id="uploadImage"
+              type="file"
+              accept="image/*"
+              onChange={onSelectFile}
+            />
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 }

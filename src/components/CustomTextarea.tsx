@@ -10,6 +10,7 @@ interface CustomTextareaProps {
   value?: string;
   onChange?: (e: React.ChangeEvent) => void;
   notResize?: boolean;
+  readOnly?: boolean
 }
 
 const blue = {
@@ -73,6 +74,7 @@ export default function CustomTextarea({
   onChange = () => {},
   value,
   notResize,
+  readOnly
 }: CustomTextareaProps) {
 
   return (
@@ -85,6 +87,7 @@ export default function CustomTextarea({
       onChange={onChange}
       minRows={minRows}
       maxRows={maxRows}
+      readOnly={readOnly}
       placeholder={placeholder ?? "Any thing..."}
     />
   );

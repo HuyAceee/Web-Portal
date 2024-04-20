@@ -14,7 +14,9 @@ import { Grow, Paper, Tooltip } from "@mui/material";
 import type { NotificationModel } from "models/view/notification";
 import { useContext } from "react";
 import { AuthContext } from "contexts/AuthContext";
-import { convertImageUrl } from "utils/common";
+import { convertImageUrl, convertObjectToQueryString } from "utils/common";
+import { useRouter } from "routes/hooks";
+import { DETAIL_NOTIFICATION } from "constant/router";
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +28,7 @@ interface PostCardProps {
 export default function PostCard({ post, index }: PostCardProps) {
   const { userInfo } = useContext(AuthContext);
   const { description, endDate, imageUrl, startDate, title } = post;
+  const router = useRouter();
 
   const latestPostLarge = index === 0;
 
@@ -117,7 +120,9 @@ export default function PostCard({ post, index }: PostCardProps) {
         }),
       }}
     >
-      {formatDate_YYYY_MM_DD(startDate) + " - " + formatDate_YYYY_MM_DD(endDate)}
+      {formatDate_YYYY_MM_DD(startDate) +
+        " - " +
+        formatDate_YYYY_MM_DD(endDate)}
     </Typography>
   );
 
@@ -137,8 +142,24 @@ export default function PostCard({ post, index }: PostCardProps) {
     />
   );
 
+  const handleRedirectNotificationDetail = () => {
+    router.push(
+      DETAIL_NOTIFICATION +
+        "?" +
+        convertObjectToQueryString({
+          id: post.id ?? 0,
+        })
+    );
+  };
+
   return (
-    <Grid xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
+    <Grid
+      xs={12}
+      sm={latestPostLarge ? 12 : 6}
+      md={latestPostLarge ? 6 : 3}
+      sx={{ cursor: "pointer" }}
+      onClick={handleRedirectNotificationDetail}
+    >
       <Grow in timeout={1000 + index * 200}>
         <Paper>
           <Card>

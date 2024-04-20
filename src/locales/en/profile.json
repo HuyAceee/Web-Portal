@@ -13,7 +13,8 @@
       "phoneNumber": "Phone number",
       "oldPassword": "Old password",
       "newPassword": "New password",
-      "confirmPassword": "Confirm password"
+      "confirmPassword": "Confirm password",
+      "password": "Password"
     },
     "action": {
       "save": "Save",

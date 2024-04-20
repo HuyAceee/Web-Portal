@@ -5,8 +5,13 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NotificationForm } from "../NotificationForm";
 import { NotificationInfo } from "../NotificationInfo";
+import type { NotificationModel } from "models/view/notification";
 
-export default function NotificationView(): React.JSX.Element {
+interface NotificationViewProps {
+  data?: NotificationModel
+}
+
+export default function NotificationView({ data }: NotificationViewProps): React.JSX.Element {
   const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState();
   return (
@@ -19,10 +24,11 @@ export default function NotificationView(): React.JSX.Element {
           <NotificationInfo
             selectedFile={selectedFile}
             setSelectedFile={setSelectedFile}
+            defaultData={data}
           />
         </Grid>
         <Grid lg={8} md={6} xs={12}>
-          <NotificationForm selectedFile={selectedFile} />
+          <NotificationForm selectedFile={selectedFile} defaultData={data} />
         </Grid>
       </Grid>
     </Stack>

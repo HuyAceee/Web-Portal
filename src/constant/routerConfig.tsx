@@ -16,7 +16,8 @@ import {
   USER_PAGE,
   MAP_PAGE,
   DETAIL_SEMESTER,
-  POINT_PAGE
+  POINT_PAGE,
+  DETAIL_NOTIFICATION
 } from "./router";
 import SvgColor from "components/SvgColor";
 
@@ -78,10 +79,22 @@ export const routerUser: RouterItemModel[] = [
     icon: icon("ic_blog"),
   },
   {
+    path: DETAIL_NOTIFICATION,
+    element: NewNotificationPage,
+    title: "title.notification",
+    isHiddenMenu: true,
+  },
+  {
     path: CONTACT_ADMIN,
     element: ContactAdminPage,
     title: "title.contactAdmin",
     icon: icon("ic_contact-admin"),
+  },
+  {
+    path: SEMESTER_PAGE,
+    element: SemesterPage,
+    title: "title.semester",
+    icon: icon("ic_semester"),
   },
   {
     path: MAP_PAGE,
@@ -136,6 +149,12 @@ export const routerAdmin: RouterItemModel[] = [
   },
   {
     path: NEW_NOTIFICATION,
+    element: NewNotificationPage,
+    title: "title.notification",
+    isHiddenMenu: true,
+  },
+  {
+    path: DETAIL_NOTIFICATION,
     element: NewNotificationPage,
     title: "title.notification",
     isHiddenMenu: true,

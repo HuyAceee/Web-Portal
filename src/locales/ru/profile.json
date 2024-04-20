@@ -13,7 +13,8 @@
       "phoneNumber": "Номер телефона",
       "oldPassword": "Старый пароль",
       "newPassword": "Новый пароль",
-      "confirmPassword": "Подтвердить пароль"
+      "confirmPassword": "Подтвердить пароль",
+      "password": "Пароль"
     },
     "action": {
       "save": "Сохранить",

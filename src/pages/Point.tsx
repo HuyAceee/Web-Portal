@@ -1,5 +1,4 @@
 import {
-  Button,
   Card,
   Container,
   Stack,
@@ -7,29 +6,21 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography,
+  Typography
 } from "@mui/material";
-import Iconify from "components/Iconify";
 import Scrollbar from "components/Scrollbar";
 import { ROLE } from "constant/key";
-import { NEW_SEMESTER } from "constant/router";
 import { LoadingContext } from "contexts/LoadingContext";
 import type { HeaderLabelModel } from "models/common";
-import type { ClassroomModel } from "models/view/classroom";
 import type { SemesterPointModel, SubjectPointModel } from "models/view/point";
-import type { SemesterFormModel } from "models/view/semester";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { RouterLink } from "routes/components";
 import PointTableRow from "sections/point/PointTableRow";
-import SemesterTableRow from "sections/semester/SemesterTableRow";
 import TableEmptyRows from "sections/user/TableEmptyRows";
 import TableNoData from "sections/user/TableNoData";
 import UserTableHead from "sections/user/UserTableHead";
 import { emptyRows } from "sections/user/utils";
-import { ClassroomService } from "services/classroom";
 import { PointService } from "services/point";
-import { SemesterService } from "services/semester";
 import { isAdmin } from "utils/common";
 import { handleLocalStorage } from "utils/localStorage";
 
@@ -37,12 +28,10 @@ import { handleLocalStorage } from "utils/localStorage";
 
 const HeaderLabel: HeaderLabelModel[] = [
   { id: "sunjectName", label: "point.list.subjectName" },
-  { id: "semester", label: "point.list.semester" },
+  { id: "point", label: "point.list.point" },
   { id: "startDate", label: "semester.table.header.startDate" },
   { id: "endDate", label: "semester.table.header.endDate" },
 ];
-
-const CoulumnAction: HeaderLabelModel[] = [{ id: "", label: "" }];
 
 export default function PointView() {
   const { t } = useTranslation();
@@ -137,7 +126,7 @@ export default function PointView() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleSort}
-                headLabel={isAdmin(getLocalStorage(ROLE)) ? [...HeaderLabel, ...CoulumnAction] : HeaderLabel}
+                headLabel={HeaderLabel}
               />
               <TableBody>
                 {points

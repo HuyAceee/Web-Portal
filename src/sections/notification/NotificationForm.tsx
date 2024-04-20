@@ -15,7 +15,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import CustomTextarea from "components/CustomTextarea";
-import { NOTIFICATION_PAGE } from "constant/router";
+import { DETAIL_NOTIFICATION, NOTIFICATION_PAGE } from "constant/router";
 import { fieldRequired } from "constant/validation";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -23,38 +23,51 @@ import type { NotificationModel } from "models/view/notification";
 import { useSnackbar } from "notistack";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { useRouter } from "routes/hooks";
+import { usePathname, useRouter } from "routes/hooks";
 import { NotificationService } from "services/notification";
 import { UploadService } from "services/upload";
 import { convertObjectWithDefaults } from "utils/common";
-import { formatDate_YYYY_MM_DD } from "utils/formatTime";
+import { convertDate } from "utils/formatTime";
 import * as Yup from "yup";
 
 interface NotificationFormProps {
   selectedFile: any;
+  defaultData?: NotificationModel;
 }
 
 export function NotificationForm({
   selectedFile,
+  defaultData,
 }: NotificationFormProps): React.JSX.Element {
   const { t } = useTranslation();
-  const router = useRouter()
+  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const pathname = usePathname();
 
   const validationSchema = Yup.object({
     title: Yup.string().required(t(fieldRequired)),
-    description: Yup.string().required(t(fieldRequired))
+    description: Yup.string().required(t(fieldRequired)),
   });
 
   const formik = useFormik<NotificationModel>({
     validateOnChange: true,
     enableReinitialize: true,
-    initialValues: convertObjectWithDefaults<NotificationModel>({
-      title: "",
-      description: "",
-      startDate: undefined,
-      endDate: undefined,
-    } as NotificationModel),
+    initialValues: defaultData
+      ? {
+          ...defaultData,
+          startDate: new Date(
+            convertDate((defaultData?.startDate as string) ?? "")
+          ).valueOf(),
+          endDate: new Date(
+            convertDate((defaultData?.endDate as string) ?? "")
+          ).valueOf(),
+        }
+      : convertObjectWithDefaults<NotificationModel>({
+          title: "",
+          description: "",
+          startDate: undefined,
+          endDate: undefined,
+        } as NotificationModel),
     validationSchema,
     onSubmit: async (value) => {
       try {
@@ -71,7 +84,7 @@ export function NotificationForm({
         enqueueSnackbar(t("notification.title.createSuccess"), {
           variant: "success",
         });
-        router.push(NOTIFICATION_PAGE)
+        router.push(NOTIFICATION_PAGE);
       } catch (error) {
         enqueueSnackbar(t("notification.title.createFail"), {
           variant: "error",
@@ -101,6 +114,7 @@ export function NotificationForm({
                     name="startDate"
                     selectedSections="all"
                     format="DD/MM/YYYY"
+                    readOnly={pathname === DETAIL_NOTIFICATION}
                     value={values.startDate ? dayjs(values.startDate) : dayjs()}
                     onChange={(value: any) => {
                       setFieldValue("startDate", Date.parse(value));
@@ -124,7 +138,8 @@ export function NotificationForm({
                     name="endDate"
                     selectedSections="all"
                     format="DD/MM/YYYY"
-                    value={values.startDate ? dayjs(values.endDate) : dayjs()}
+                    readOnly={pathname === DETAIL_NOTIFICATION}
+                    value={values.endDate ? dayjs(values.endDate) : dayjs()}
                     onChange={(value: any) => {
                       setFieldValue("endDate", Date.parse(value));
                     }}
@@ -133,7 +148,7 @@ export function NotificationForm({
               </LocalizationProvider>
               {!!errors.endDate && touched.endDate && (
                 <FormHelperText error id="accountId-error">
-                  {(errors as any)?.endDate ?? ''}
+                  {(errors as any)?.endDate ?? ""}
                 </FormHelperText>
               )}
             </FormControl>
@@ -147,6 +162,7 @@ export function NotificationForm({
                 name="title"
                 value={values.title}
                 onChange={handleChange}
+                readOnly={pathname === DETAIL_NOTIFICATION}
                 notResize
               />
               {!!errors.title && touched.title && (
@@ -164,6 +180,7 @@ export function NotificationForm({
               <CustomTextarea
                 name="description"
                 value={values.description}
+                readOnly={pathname === DETAIL_NOTIFICATION}
                 onChange={handleChange}
                 notResize
               />
@@ -177,15 +194,17 @@ export function NotificationForm({
         </Grid>
       </CardContent>
       <Divider />
-      <CardActions sx={{ justifyContent: "flex-end" }}>
-        <Button
-          variant="contained"
-          type="submit"
-          onClick={() => handleSubmit()}
-        >
-          {t("action.create")}
-        </Button>
-      </CardActions>
+      {pathname !== DETAIL_NOTIFICATION && (
+        <CardActions sx={{ justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            type="submit"
+            onClick={() => handleSubmit()}
+          >
+            {t("action.create")}
+          </Button>
+        </CardActions>
+      )}
     </Card>
   );
 }
