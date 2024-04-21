@@ -3,9 +3,10 @@ import AppBar from "@mui/material/AppBar";
 import Stack from "@mui/material/Stack";
 import Toolbar from "@mui/material/Toolbar";
 import { useTheme } from "@mui/material/styles";
-import { DASHBOARD_PAGE } from "constant/router";
+import { PROFILE_PAGE } from "constant/router";
 import { AuthContext } from "contexts/AuthContext";
 import { HEADER } from "layouts/dashboard/ConfigLayout";
+import LanguagePopover from "layouts/dashboard/common/LanguagePopover";
 import { useContext } from "react";
 import { useRouter } from "routes/hooks";
 import { bgBlur } from "theme/css";
@@ -20,10 +21,11 @@ export default function Header() {
 
   const renderContent = (
     <Stack direction="row" alignItems="center" spacing={1}>
+      <LanguagePopover />
       <Avatar
         src={convertImageUrl(userInfo.imageUrl)}
         sx={{ cursor: "pointer" }}
-        onClick={() => router.push(DASHBOARD_PAGE)}
+        onClick={() => router.push(PROFILE_PAGE)}
       />
     </Stack>
   );

@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   Container,
   Stack,
@@ -6,13 +7,20 @@ import {
   TableBody,
   TableContainer,
   TablePagination,
-  Typography
+  Typography,
 } from "@mui/material";
 import Scrollbar from "components/Scrollbar";
 import { ROLE } from "constant/key";
+import { DialogContext } from "contexts/DialogContext";
 import { LoadingContext } from "contexts/LoadingContext";
 import type { HeaderLabelModel } from "models/common";
-import type { SemesterPointModel, SubjectPointModel } from "models/view/point";
+import type {
+  PointUpdateRequestItemModel,
+  SemesterPointAdminModel,
+  SemesterPointModel,
+  SubjectPointModel,
+} from "models/view/point";
+import { useSnackbar } from "notistack";
 import { useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import PointTableRow from "sections/point/PointTableRow";
@@ -26,6 +34,10 @@ import { handleLocalStorage } from "utils/localStorage";
 
 // ----------------------------------------------------------------------
 
+const HeaderLabelAdmin: HeaderLabelModel[] = [
+  { id: "name", label: "point.list.name" },
+];
+
 const HeaderLabel: HeaderLabelModel[] = [
   { id: "sunjectName", label: "point.list.subjectName" },
   { id: "point", label: "point.list.point" },
@@ -37,6 +49,9 @@ export default function PointView() {
   const { t } = useTranslation();
   const { getLocalStorage } = handleLocalStorage();
   const { openLoading, closeLoading, loading } = useContext(LoadingContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const { openDialog } = useContext(DialogContext);
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState<"asc" | "desc">("asc");
@@ -45,13 +60,9 @@ export default function PointView() {
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [points, setPoints] = useState<SubjectPointModel[]>([
-    {
-      id: 1,
-      point: 10,
-      subjectName: "abc",
-    },
-  ]);
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [points, setPoints] = useState<SubjectPointModel[]>([]);
 
   const handleSort = (_event: any, id: string) => {
     const isAsc = orderBy === id && order === "asc";
@@ -86,13 +97,32 @@ export default function PointView() {
     return response;
   };
 
+  const convertDataTableAdmin = (
+    data: SemesterPointAdminModel[]
+  ): SubjectPointModel[] => {
+    let response: SubjectPointModel[] = [];
+    data.forEach((item) => {
+      item.listSemesterPoint.forEach((semester) => {
+        semester.listSubjectPoint.forEach((point) => {
+          response.push({
+            ...point,
+            startDate: semester.startDate,
+            endDate: semester.endDate,
+            name: item.name,
+          });
+        });
+      });
+    });
+    return response;
+  };
+
   const getPoint = async () => {
     try {
       openLoading();
       let response: SubjectPointModel[] = [];
       if (isAdmin(getLocalStorage(ROLE))) {
         const { data } = await PointService.getListForAdmin();
-        response = convertDataTable(data);
+        response = convertDataTableAdmin(data);
       } else {
         const { data } = await PointService.getListForUser();
         response = convertDataTable(data);
@@ -107,6 +137,42 @@ export default function PointView() {
     getPoint();
   }, []);
 
+  const handleEditPoint = (index: number, point: any) => {
+    if (point > 100) return;
+    const temp = [...points];
+    temp.splice(index, 1, { ...temp[index], point });
+    setPoints(temp);
+  };
+
+  const handleSavePoint = async () => {
+    openDialog?.({
+      title: "point.list.save",
+      content: "point.list.editPointConfirm",
+      async onConfirm() {
+        try {
+          openLoading();
+          const dataMapping: PointUpdateRequestItemModel[] = points.map(
+            (point) => ({
+              id: point.id,
+              point: Number(point.point),
+            })
+          );
+          await PointService.update(dataMapping);
+          enqueueSnackbar(t("notification.title.success"), {
+            variant: "success",
+          });
+          setIsEdit(false);
+        } catch (error) {
+          enqueueSnackbar(t("notification.title.fail"), {
+            variant: "error",
+          });
+        } finally {
+          closeLoading();
+        }
+      },
+    });
+  };
+
   return (
     <Container>
       <Stack
@@ -117,6 +183,20 @@ export default function PointView() {
         justifyContent="space-between"
       >
         <Typography variant="h4">{t("point.list.title")}</Typography>
+        {isAdmin(getLocalStorage(ROLE)) && (
+          <Button
+            onClick={() => {
+              if (!isEdit) {
+                setIsEdit(true);
+                return;
+              }
+              handleSavePoint();
+            }}
+            variant="contained"
+          >
+            {t(isEdit ? "point.list.save" : "point.list.edit")}
+          </Button>
+        )}
       </Stack>
       <Card>
         <Scrollbar>
@@ -126,13 +206,24 @@ export default function PointView() {
                 order={order}
                 orderBy={orderBy}
                 onRequestSort={handleSort}
-                headLabel={HeaderLabel}
+                headLabel={
+                  isAdmin(getLocalStorage(ROLE))
+                    ? [...HeaderLabelAdmin, ...HeaderLabel]
+                    : HeaderLabel
+                }
               />
               <TableBody>
                 {points
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
-                    <PointTableRow key={index} data={row} />
+                    <PointTableRow
+                      key={index}
+                      idx={index}
+                      data={row}
+                      isEdit={isEdit}
+                      handleEditPoint={handleEditPoint}
+                      isAdmin={isAdmin(getLocalStorage(ROLE))}
+                    />
                   ))}
 
                 <TableEmptyRows
@@ -152,6 +243,7 @@ export default function PointView() {
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
+          labelRowsPerPage={t("table.rowsPerPage")}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>

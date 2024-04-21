@@ -20,7 +20,7 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { FormHelperText } from "@mui/material";
 import Iconify from "components/Iconify";
 import { ACCESS_TOKEN } from "constant/key";
-import { DASHBOARD_PAGE, RESET_PASSWORD } from "constant/router";
+import { PROFILE_PAGE, RESET_PASSWORD } from "constant/router";
 import { fieldEmail, fieldRequired } from "constant/validation";
 import { AuthContext } from "contexts/AuthContext";
 import { LoadingContext } from "contexts/LoadingContext";
@@ -74,7 +74,7 @@ export default function LoginView() {
           variant: "success",
         });
         await handleGetUserInfor();
-        router.push(DASHBOARD_PAGE);
+        router.push(PROFILE_PAGE);
       } catch (error) {
         enqueueSnackbar(t("notification.title.loginFail"), {
           variant: "error",
@@ -89,7 +89,7 @@ export default function LoginView() {
 
   useEffect(() => {
     const accessToken = localStorage.getItem(ACCESS_TOKEN);
-    if (accessToken) router.push(DASHBOARD_PAGE);
+    if (accessToken) router.push(PROFILE_PAGE);
   }, []);
 
   const renderForm = (

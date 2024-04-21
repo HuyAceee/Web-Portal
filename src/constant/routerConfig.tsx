@@ -2,13 +2,11 @@ import { LazyExoticComponent, lazy } from "react";
 import {
   CHANGE_PASSWORD_PAGE,
   CONTACT_ADMIN,
-  DASHBOARD_PAGE,
   MAIN_PAGE,
   NEW_NOTIFICATION,
   NEW_SEMESTER,
   NEW_USER,
   NOTIFICATION_PAGE,
-  PRODUCTS_PAGE,
   PROFILE_PAGE,
   RESET_PASSWORD,
   SEMESTER_PAGE,
@@ -30,7 +28,6 @@ export const icon = (name: string) => (
 
 export const ROUTER_NO_AUTH = [MAIN_PAGE, RESET_PASSWORD];
 
-const IndexPage = lazy(() => import("pages/App"));
 const UserPage = lazy(() => import("pages/User"));
 const NotificationPage = lazy(() => import("pages/Blog"));
 const ProfilePage = lazy(() => import("pages/Profile"));
@@ -54,13 +51,6 @@ interface RouterItemModel {
 }
 
 export const routerUser: RouterItemModel[] = [
-  {
-    path: DASHBOARD_PAGE,
-    element: IndexPage,
-    index: true,
-    title: "title.dashboard",
-    icon: icon("ic_analytics"),
-  },
   {
     path: PROFILE_PAGE,
     element: ProfilePage,
@@ -116,13 +106,6 @@ export const routerUser: RouterItemModel[] = [
 ];
 
 export const routerAdmin: RouterItemModel[] = [
-  {
-    path: DASHBOARD_PAGE,
-    element: IndexPage,
-    index: true,
-    title: "title.dashboard",
-    icon: icon("ic_analytics"),
-  },
   {
     path: PROFILE_PAGE,
     element: ProfilePage,

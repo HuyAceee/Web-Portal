@@ -1,80 +1,43 @@
-import { IconButton, MenuItem, Popover } from "@mui/material";
+import Input from '@mui/material/Input';
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
-import Iconify from "components/Iconify";
-import { POINT_DETAIL } from "constant/router";
-import { t } from "i18next";
 import type { SubjectPointModel } from "models/view/point";
-import { useState } from "react";
-import { useRouter } from "routes/hooks";
-import { convertObjectToQueryString } from "utils/common";
-import { formatDate_YYYY_MM_DD } from "utils/formatTime";
+
+const ariaLabel = { 'aria-label': 'description' };
 
 // ----------------------------------------------------------------------
 
 interface PointTableRowProps {
   data: SubjectPointModel;
+  isEdit: boolean;
+  isAdmin: boolean;
+  idx: number;
+  handleEditPoint: (index: number, value: any) => void
 }
 
-export default function PointTableRow({ data }: PointTableRowProps) {
-  const [open, setOpen] = useState(null);
-  const router = useRouter();
-
-  const handleOpenMenu = (event: any) => {
-    setOpen(event.currentTarget);
-  };
-
-  const handleCloseMenu = () => {
-    setOpen(null);
-  };
-
-  const handleRedirectDetailSemesters = () => {
-    handleCloseMenu();
-    router.push(
-      POINT_DETAIL +
-        "?" +
-        convertObjectToQueryString({
-          id: data.id?.toString() ?? "",
-        })
-    );
-  };
+export default function PointTableRow({ data, isEdit, idx, handleEditPoint, isAdmin }: PointTableRowProps) {
   return (
     <>
-      <TableRow hover tabIndex={-1} role="checkbox">
+      <TableRow hover tabIndex={-1} role="checkbox" sx={{ height: "70px" }}>
+        {isAdmin && <TableCell align="center">{data?.name}</TableCell>}
         <TableCell align="center">{data?.subjectName}</TableCell>
 
-        <TableCell align="center">{data?.point}</TableCell>
-
         <TableCell align="center">
-          {formatDate_YYYY_MM_DD(data.startDate ?? "")}
+          {isEdit ? (
+            <Input maxRows={2} sx={{ width: "40px" }} type='number' value={data.point} inputProps={ariaLabel} onChange={(event: any) => handleEditPoint(idx, event?.target?.value)} />
+          ) : (
+            data.point
+          )}
         </TableCell>
 
         <TableCell align="center">
-          {formatDate_YYYY_MM_DD(data.endDate ?? "")}
+          {data.startDate}
         </TableCell>
 
-        <TableCell align="right" width={20}>
-          <IconButton onClick={handleOpenMenu}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+        <TableCell align="center">
+          {data.endDate}
         </TableCell>
       </TableRow>
-
-      <Popover
-        open={!!open}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: "top", horizontal: "left" }}
-        transformOrigin={{ vertical: "top", horizontal: "right" }}
-        PaperProps={{
-          sx: { width: 140 },
-        }}
-      >
-        <MenuItem onClick={handleRedirectDetailSemesters}>
-          <Iconify icon="eva:edit-fill" sx={{ mr: 2 }} />
-          {t("action.edit")}
-        </MenuItem>
-      </Popover>
     </>
   );
 }

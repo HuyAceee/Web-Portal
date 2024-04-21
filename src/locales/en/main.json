@@ -1,0 +1,24 @@
+{
+  "main": {
+    "educationScience": {
+      "title": "Educational and scientific departments",
+      "title1": "Institute of Information Technologies divisions",
+      "title2": "Institute of Artificial Intelligence",
+      "title3": "Institute of Radio Electronics and Informatics",
+      "title4": "Institute of Fine Chemical Technologies named after M.V. Lomonosov",
+      "title5": "Institute of Cybersecurity and Digital Technologies",
+      "title6": "Institute of Advanced Technologies and Industrial Programming",
+      "title7": "Institute of Management Technologies",
+      "title8": "Institute of International Education"
+    },
+    "interesting": {
+      "title": "Interesting",
+      "title1": "Olympiads for schoolchildren",
+      "title2": "Idea Accelerator",
+      "title3": "Student and Teacher of the Year",
+      "title4": "Open Days",
+      "title5": "Megalaboratories",
+      "title6": "Megalaboratories"
+    }
+  }
+}

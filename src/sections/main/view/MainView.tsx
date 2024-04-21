@@ -4,8 +4,10 @@ import { BANNERS } from "constant";
 import { Box, Typography } from "@mui/material";
 import EducationScience from "./EducationScience";
 import Interesting from "./Interesting";
+import { useTranslation } from "react-i18next";
 
 const MainView = () => {
+  const { t } = useTranslation()
 return (
     <Box sx={{ maxWidth: "100vw" }}>
       <Slider list={BANNERS} />
@@ -25,7 +27,7 @@ return (
           }}
         >
           <EducationScience />
-          <Typography sx={{ fontSize: 40, width: '100%' }} my={5} alignContent="center" textAlign="center">Интересное</Typography>
+          <Typography sx={{ fontSize: 40, width: '100%' }} my={5} alignContent="center" textAlign="center">{t("main.interesting.title")}</Typography>
           <Interesting />
         </Box>
       </Box>

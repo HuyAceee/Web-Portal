@@ -4,7 +4,11 @@
       "title": "Point",
       "subjectName": "Subject name",
       "semester": "Semester",
-      "point": "Point"
+      "point": "Point",
+      "edit": "Edit point",
+      "save": "Save point",
+      "name": "Name",
+      "editPointConfirm": "Do you want to save changes?"
     }
   }
 }

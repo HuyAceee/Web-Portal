@@ -4,6 +4,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import IconButton from "@mui/material/IconButton";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import { useTranslation } from "react-i18next";
 
 function srcset(
   image: string,
@@ -21,6 +22,7 @@ function srcset(
 }
 
 export default function Interesting() {
+  const { t } = useTranslation()
   return (
     <ImageList
       sx={{
@@ -44,12 +46,12 @@ export default function Interesting() {
                   "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
                   "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
               }}
-              title={item.title}
+              title={t(item.title)}
               position="top"
               actionIcon={
                 <IconButton
                   sx={{ color: "white" }}
-                  aria-label={`star ${item.title}`}
+                  aria-label={`star ${t(item.title)}`}
                 >
                   <StarBorderIcon />
                 </IconButton>
@@ -66,33 +68,26 @@ export default function Interesting() {
 const itemData = [
   {
     img: "https://www.mirea.ru/bitrix/templates/unlimtech/images/1.jpg",
-    title: "Олимпиады для школьников",
-    author: "@bkristastucchio",
-    featured: true,
+    title: "main.interesting.title1",
   },
   {
     img: "https://www.mirea.ru/bitrix/templates/unlimtech/images/5.jpg",
-    title: "Акселератор идей",
-    author: "@rollelflex_graphy726",
+    title: "main.interesting.title2",
   },
   {
     img: "https://www.mirea.ru/bitrix/templates/unlimtech/images/4.jpg",
-    title: "Студент и преподаватель года",
-    author: "@helloimnik",
+    title: "main.interesting.title3",
   },
   {
     img: "https://www.mirea.ru/bitrix/templates/unlimtech/images/2.jpg",
-    title: "Дни открытых дверей",
-    author: "@nolanissac",
+    title: "main.interesting.title4",
   },
   {
     img: "https://www.mirea.ru/bitrix/templates/unlimtech/images/3.jpg",
-    title: "Мегалаборатории",
-    author: "@hjrc33",
+    title: "main.interesting.title5",
   },
   {
     img: "https://www.mirea.ru/bitrix/templates/unlimtech/images/3.jpg",
-    title: "Мегалаборатории",
-    author: "@hjrc33",
+    title: "main.interesting.title6",
   },
 ];

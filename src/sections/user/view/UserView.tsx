@@ -136,6 +136,7 @@ export default function UserPage() {
           rowsPerPage={rowsPerPage}
           onPageChange={handleChangePage}
           rowsPerPageOptions={[5, 10, 25]}
+          labelRowsPerPage={t("table.rowsPerPage")}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Card>

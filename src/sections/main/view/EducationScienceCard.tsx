@@ -3,6 +3,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import type { CardModel } from "models/common";
+import { useTranslation } from "react-i18next";
 
 interface EducationScienceCardProps {
   card: CardModel;
@@ -11,6 +12,7 @@ interface EducationScienceCardProps {
 export default function EducationScienceCard({
   card,
 }: EducationScienceCardProps) {
+  const { t } = useTranslation()
   return (
     <Card sx={{ height: "100%" }}>
       <CardMedia
@@ -24,7 +26,7 @@ export default function EducationScienceCard({
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {card.title}
+          {t(card.title)}
         </Typography>
       </CardContent>
     </Card>

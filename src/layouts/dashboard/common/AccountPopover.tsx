@@ -8,7 +8,7 @@ import { alpha } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import { DASHBOARD_PAGE, LOGIN_PAGE, PROFILE_PAGE } from 'constant/router';
+import { LOGIN_PAGE, PROFILE_PAGE } from 'constant/router';
 import { useRouter } from 'routes/hooks';
 import { handleLocalStorage } from 'utils/localStorage';
 import { ACCESS_TOKEN } from 'constant/key';
@@ -19,11 +19,11 @@ import { convertImageUrl } from 'utils/common';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
-  {
-    label: 'path.title.home',
-    icon: 'eva:home-fill',
-    to: DASHBOARD_PAGE
-  },
+  // {
+  //   label: 'path.title.home',
+  //   icon: 'eva:home-fill',
+  //   to: DASHBOARD_PAGE
+  // },
   {
     label: 'path.title.profile',
     icon: 'eva:person-fill',
