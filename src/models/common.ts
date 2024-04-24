@@ -23,6 +23,7 @@ export enum AccountPageEnum {
 }
 
 export interface CardModel {
+  id: number;
   image: string;
   title: string;
   description: string;

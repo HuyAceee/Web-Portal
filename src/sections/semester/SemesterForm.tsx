@@ -80,20 +80,16 @@ export function SemesterForm({ defaultData }: SemesterFormProps): JSX.Element {
   const formik = useFormik<SemesterFormModel>({
     validateOnChange: false,
     enableReinitialize: true,
-    initialValues: defaultData ? ({
+    initialValues: {
       ...defaultData,
       startDate: new Date(
-        convertDate((defaultData?.startDate as string) ?? '')
+        convertDate((defaultData?.startDate as string) ?? "")
       ).valueOf(),
       endDate: new Date(
         convertDate((defaultData?.endDate as string) ?? "")
       ).valueOf(),
-    } as SemesterFormModel) : {
-      classroomId: undefined,
-      startDate: convertDate(),
-      endDate: convertDate(),
-      listSubject: [],
-    },
+      listSubject: defaultData?.listSubject ?? [],
+    } as SemesterFormModel,
     validationSchema: Yup.object({
       classroomId: Yup.number().required(t(fieldRequired)),
       startDate: Yup.string().required(t(fieldRequired)),

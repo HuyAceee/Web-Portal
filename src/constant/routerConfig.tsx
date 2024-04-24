@@ -15,7 +15,8 @@ import {
   MAP_PAGE,
   DETAIL_SEMESTER,
   POINT_PAGE,
-  DETAIL_NOTIFICATION
+  DETAIL_NOTIFICATION,
+  EDUCATION_DETAIL
 } from "./router";
 import SvgColor from "components/SvgColor";
 
@@ -26,7 +27,7 @@ export const icon = (name: string) => (
   />
 );
 
-export const ROUTER_NO_AUTH = [MAIN_PAGE, RESET_PASSWORD];
+export const ROUTER_NO_AUTH = [MAIN_PAGE, RESET_PASSWORD, EDUCATION_DETAIL];
 
 const UserPage = lazy(() => import("pages/User"));
 const NotificationPage = lazy(() => import("pages/Blog"));

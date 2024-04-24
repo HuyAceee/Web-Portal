@@ -1,5 +1,6 @@
 import { ROLE } from "constant/key";
 import {
+  EDUCATION_DETAIL,
   LOGIN_PAGE,
   MAIN_PAGE,
   NOT_FOUND_PAGE,
@@ -19,6 +20,7 @@ export const LoginPage = lazy(() => import("pages/Login"));
 export const MainPage = lazy(() => import("pages/Main"));
 export const Page404 = lazy(() => import("pages/PageNotFound"));
 export const ResetPasswordPage = lazy(() => import("pages/ResetPassword"));
+const EducationDetailPage = lazy(() => import("sections/education/EducationDetail"));
 
 // ----------------------------------------------------------------------
 
@@ -53,6 +55,10 @@ export default function Router() {
         {
           path: MAIN_PAGE,
           element: <MainPage />,
+        },
+        {
+          path: EDUCATION_DETAIL,
+          element: <EducationDetailPage />,
         },
       ],
     },
