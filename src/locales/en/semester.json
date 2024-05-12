@@ -16,10 +16,19 @@
             "className": "Class name",
             "teacherName": "Teacher name",
             "week": "Week",
+            "weekday": "Weekday",
+            "period": "Period",
             "park": "Prak",
             "lab": "Lab",
             "lecturePack": "Lecture",
-            "subjectTime": "Subject times"
+            "subjectTime": "Subject times",
+            "monday": "Monday",
+            "tuesday": "Tuesday",
+            "wednesday": "Wednesday",
+            "thursday": "Thursday",
+            "friday": "Friday",
+            "saturday": "Saturday",
+            "sunday": "Sunday"
         },
         "table": {
             "header": {

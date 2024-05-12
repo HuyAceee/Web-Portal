@@ -17,6 +17,8 @@ export interface SubjectTimeModel {
   teacherName: string;
   className: string;
   week: number;
+  weekday: number;
+  period: number
 }
 
 export enum SubjectTimeTypeEnum {

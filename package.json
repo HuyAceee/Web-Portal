@@ -21,6 +21,8 @@
     "vite:build": "vite build"
   },
   "dependencies": {
+    "@devexpress/dx-react-scheduler": "^4.0.8",
+    "@devexpress/dx-react-scheduler-material-ui": "^4.0.8",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@faker-js/faker": "^8.1.0",

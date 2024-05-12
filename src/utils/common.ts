@@ -1,4 +1,5 @@
 import { BASE_URL } from "constant";
+import dayjs from "dayjs";
 import { RoleEnum } from "models/common";
 
 export const isAdmin = (role: RoleEnum) => role === RoleEnum.ADMIN;
@@ -31,4 +32,27 @@ export function convertObjectToQueryString(
     }
   }
   return queryStringParts.join("&");
+}
+
+export const getFirstDay = (year: number | string, month: number | string) => {
+  const startDate = dayjs(`${year}-${month}-01`); // First day of the month
+  return startDate.unix()
+}
+
+export const getEndDay = (year: number | string, month: number | string) => {
+  const startDate = dayjs(`${year}-${month}-01`); // First day of the month
+  const endDate = startDate.endOf('month');
+  return endDate.unix()
+}
+
+export function getDays(startDate: Date, endDate: Date, weekday: number): Date[] {
+  const mondays: Date[] = [];
+
+  for (let date = startDate; date <= endDate; date = new Date(date.getTime() + 24 * 60 * 60 * 1000)) {
+    if (date.getDay() === weekday) {
+      mondays.push(date);
+    }
+  }
+
+  return mondays;
 }

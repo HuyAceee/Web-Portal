@@ -71,13 +71,14 @@ export function AccountDetailsForm({
   const getClassroom = async () => {
     try {
       const data = await ClassroomService.getList();
-      setClassroom(data);
+      if (data && Array.isArray(data)) setClassroom(data);
     } catch (error) {
       console.log(error);
     }
   };
 
   const classroomOptions = React.useMemo(() => {
+    if (classroom.length === 0) return [];
     return classroom.map((i) => ({ value: i.id, label: i.name }));
   }, [classroom]);
 
@@ -88,14 +89,14 @@ export function AccountDetailsForm({
     phoneNumber: Yup.string()
       .required(t(fieldRequired))
       .matches(phoneNumberRegex, t(fieldPhoneNumber)),
-    ...(isAdminAccount ? { classroomId: Yup.string().required() } : {}),
+    ...(!isAdminAccount ? { classroomId: Yup.string().required() } : {}),
   });
   const formik = useFormik<UserInformationModel>({
     validateOnChange: true,
     enableReinitialize: true,
     initialValues: convertObjectWithDefaults<UserInformationModel>({
       ...defaultData,
-      ...(defaultData.classroom ? { classroomId: defaultData.classroom.id } : {}),
+      ...(defaultData?.classroom ? { classroomId: defaultData?.classroom?.id } : {}),
       isFemale: defaultData?.isFemale ? 1 : 0,
       birthDate: new Date(convertDate(defaultData?.birthDate as string ?? '')).valueOf()
     }),
@@ -145,6 +146,8 @@ export function AccountDetailsForm({
     getClassroom();
     
   }, []);
+
+  console.log(errors)
 
   const showClassroomField = React.useMemo(() => {
     if (pathname === PROFILE_PAGE && isAdminAccount) return false;
@@ -207,7 +210,7 @@ export function AccountDetailsForm({
                   disabled={pathname === PROFILE_PAGE}
                   error={!!errors.classroomId}
                 >
-                  {classroomOptions.map((option, index) => (
+                  {classroomOptions?.map((option, index) => (
                     <MenuItem key={index.toString()} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -233,7 +236,7 @@ export function AccountDetailsForm({
                 variant="outlined"
                 error={!!errors.isFemale}
               >
-                {genders.map((option, index) => (
+                {genders?.map((option, index) => (
                   <MenuItem key={index.toString()} value={option.value}>
                     {t(option.label)}
                   </MenuItem>
